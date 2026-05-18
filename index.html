@@ -622,13 +622,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 
 <script>
 // ── ESTADO ────────────────────────────────────────────────────────────────────
-let USERS={
-  dueno:{pass:'1234',role:'owner',nombre:'Dueño 1',socioId:'s1'},
-  socio2:{pass:'1234',role:'owner',nombre:'Dueño 2',socioId:'s2'},
-  barbero1:{pass:'1234',role:'b1',nombre:'Barbero Principal',pct:60},
-  barbero2:{pass:'1234',role:'b2',nombre:'Barbero 2',pct:50},
-  barbero3:{pass:'1234',role:'b3',nombre:'Barbero 3',pct:50}
-};
+let USERS={};
 let currentUser=null;
 let SHEETS_URL='';
 
@@ -642,13 +636,7 @@ let S={
     b3:{total:0,com:0,n:0,svcs:[]}
   },
   costos:{alquiler:0,servicios:0,internet:0,insumos:0,otros:0},
-  productos:[
-    {nom:'Piercing Helix',cat:'💎 Piercings',costo:8000,venta:25000,stock:10},
-    {nom:'Pipa de vidrio',cat:'🔥 Pipas',costo:15000,venta:45000,stock:5},
-    {nom:'Grinder metálico',cat:'🌿 Accesorios',costo:12000,venta:35000,stock:8},
-    {nom:'Piercing Nostril',cat:'💎 Piercings',costo:5000,venta:18000,stock:12},
-    {nom:'Papel de liar',cat:'🌿 Accesorios',costo:1500,venta:4000,stock:30}
-  ]
+  productos:[]
 };
 let FILTROS={};
 
