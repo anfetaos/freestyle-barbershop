@@ -621,7 +621,27 @@ function doLogin(){
   const u=document.getElementById('li-u').value.trim().toLowerCase();
   const p=document.getElementById('li-p').value;
   const err=document.getElementById('li-err');
-  
+  // Si los usuarios externos no han cargado, usamos los usuarios locales por defecto
+  // para que nunca te quedes bloqueado afuera de la app
+  if (!S.usuarios || S.usuarios.length === 0) {
+    // Lista de usuarios por defecto por si falla la base de datos externa
+    const usuariosPorDefecto = [
+      { user: "dueno", pass: "1234", role: "owner" },
+      { user: "socio2", pass: "1234", role: "owner" },
+      { user: "barbero1", pass: "1234", role: "b1" },
+      { user: "barbero2", pass: "1234", role: "b2" },
+      { user: "barbero3", pass: "1234", role: "b3" }
+    ];
+    
+    const encontrado = usuariosPorDefecto.find(x => x.user === u && x.pass === p);
+    if (encontrado) {
+      loguearComo(encontrado.role, encontrado.user);
+      return;
+    } else {
+      err.textContent = "Usuario o contraseña incorrectos (Modo Local).";
+      return;
+    }
+  }
   if (Object.keys(USERS).length === 0) {
      err.textContent = 'Aún no se han cargado los usuarios de la base de datos.';
      return;
