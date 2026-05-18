@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Freestyle">
+<title>Freestyle Barbershop</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--blue:#1E90FF;--cyan:#00C8E0;--gold:#D4A017;--dark:#0E0E0E;--d2:#181818;--d3:#202020;--d4:#282828;--cream:#F0F0F0;--muted:#5a5a5a;--danger:#D85A30;--success:#1D9E75;--purple:#9B77D4}
+html,body{height:100%;overflow:hidden;background:#000}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;display:flex;justify-content:center;align-items:flex-start}
+.app{background:var(--dark);color:var(--cream);display:flex;flex-direction:column;width:100%;max-width:430px;height:100dvh;height:100vh;overflow:hidden;position:relative}
+.hdr{background:var(--d2);padding:env(safe-area-inset-top,10px) 13px 8px;padding-top:calc(env(safe-area-inset-top,0px) + 10px);border-bottom:1px solid #222;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.hdr-logo{width:30px;height:30px;border-radius:7px;background:#0d1f3c;border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.hdr-name{font-size:11px;font-weight:bold;color:#5BB3FF;letter-spacing:.5px;text-transform:uppercase}
+.hdr-sub{font-size:8px;color:var(--muted);letter-spacing:1px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:4px}
+.hdr-role{font-size:8px;padding:2px 6px;border-radius:20px;border:1px solid}
+.ro{color:var(--gold);border-color:rgba(212,160,23,.3);background:rgba(212,160,23,.07)}
+.rb{color:var(--cyan);border-color:rgba(0,200,224,.3);background:rgba(0,200,224,.07)}
+.rp{color:#666;border-color:#2a2a2a;background:#161616}
+.lo{background:none;border:1px solid #252525;border-radius:5px;color:var(--muted);font-size:8px;padding:3px 7px;cursor:pointer;display:none}
+.lo:hover{color:var(--danger)}
+.screen{flex:1;overflow:hidden;display:none;flex-direction:column;min-height:0}
+.screen.on{display:flex}
+.tab{display:none;padding:10px 11px 6px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
+.tab.on{display:block}
+
+/* LOGIN */
+.lw{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;gap:12px}
+.lt{font-size:18px;color:#5BB3FF;letter-spacing:2px;text-transform:uppercase;font-style:italic;text-align:center}
+.ls{font-size:9px;color:var(--muted);letter-spacing:2px;text-align:center;margin-top:-6px}
+.lbox{width:100%;background:var(--d2);border:1px solid #252525;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.fi{width:100%;background:var(--d3);border:1px solid #252525;border-radius:8px;color:var(--cream);padding:10px 11px;font-size:16px;outline:none;-webkit-appearance:none}
+.fi:focus{border-color:var(--blue)}
+.err{font-size:9px;color:var(--danger);text-align:center;min-height:13px}
+.btn{width:100%;padding:11px;border-radius:8px;font-size:14px;cursor:pointer;border:none;font-weight:bold}
+.bp{background:var(--blue);color:#fff}.bp:active{background:#3a9fff}
+.bo{background:transparent;color:#5BB3FF;border:1px solid #252525;margin-top:2px;font-weight:normal}.bo:active{background:rgba(30,144,255,.07)}
+.bs{padding:6px 10px;font-size:10px;border-radius:6px;cursor:pointer;border:1px solid #252525;background:transparent;color:var(--muted)}.bs:active{color:var(--cyan)}
+.hint{font-size:9px;color:var(--muted);text-align:center;line-height:1.9}
+
+/* UTILS */
+.sec{font-size:8px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;margin-top:12px}
+.sec:first-child{margin-top:0}
+.divx{border:none;border-top:1px solid #1e1e1e;margin:8px 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px}
+.kc{background:var(--d2);border:1px solid #222;border-radius:9px;padding:9px 11px}
+.kl{font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.kv{font-size:17px;font-weight:bold}
+.kv.g{color:var(--success)}.kv.r{color:var(--danger)}.kv.b{color:#5BB3FF}.kv.y{color:var(--gold)}.kv.c{color:var(--cyan)}.kv.p{color:var(--purple)}
+.ks{font-size:8px;color:var(--muted);margin-top:2px}
+.bn{font-size:22px;font-weight:bold;text-align:center;margin:4px 0}
+.card{background:var(--d2);border:1px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:6px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:5px 0}
+.row+.row{border-top:1px solid #1a1a1a}
+.badge{display:inline-block;border-radius:20px;padding:2px 7px;font-size:9px;font-weight:bold}
+.bg{color:var(--success);background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.2)}
+.bb{color:#5BB3FF;background:rgba(30,144,255,.1);border:1px solid rgba(30,144,255,.2)}
+.by{color:var(--gold);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.2)}
+.br{color:var(--danger);background:rgba(216,90,48,.1);border:1px solid rgba(216,90,48,.2)}
+.bc{color:var(--cyan);background:rgba(0,200,224,.1);border:1px solid rgba(0,200,224,.2)}
+
+/* BARS */
+.bw{margin-bottom:6px}
+.bl{font-size:9px;color:var(--muted);margin-bottom:3px;display:flex;justify-content:space-between}
+.bbg{background:#1a1a1a;border-radius:3px;height:6px;overflow:hidden}
+.bf{height:6px;border-radius:3px;transition:width .4s}
+
+/* TL */
+.tl{position:relative;padding-left:16px}
+.tl::before{content:'';position:absolute;left:4px;top:0;bottom:0;width:1px;background:#1e1e1e}
+.tli{position:relative;margin-bottom:9px}
+.tld{position:absolute;left:-13px;top:4px;width:6px;height:6px;border-radius:50%}
+.tlt{font-size:9px;color:var(--muted)}
+.tln{font-size:11px;color:var(--cream)}
+.tla{float:right;font-weight:bold;font-size:11px}
+
+/* AGENDA */
+.aslot{background:var(--d2);border:1px solid #222;border-radius:9px;padding:9px 11px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.atime{background:var(--d3);border-radius:7px;padding:4px 7px;text-align:center;min-width:42px;flex-shrink:0}
+.ahour{font-size:13px;color:var(--cyan);font-weight:bold}
+.aampm{font-size:8px;color:var(--muted)}
+
+/* SERVICIOS */
+.sbtn{display:flex;align-items:center;justify-content:space-between;background:var(--d2);border:1px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:5px;cursor:pointer;width:100%;color:var(--cream)}
+.sbtn:active{border-color:var(--blue)}
+
+/* PRODUCTOS */
+.prod-card{background:var(--d2);border:1px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:6px}
+.prod-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.prod-name{font-size:12px;color:var(--cream);font-weight:bold}
+.prod-cat{font-size:9px;color:var(--muted)}
+.prod-precios{display:flex;justify-content:space-between;align-items:center}
+.prod-costo{font-size:10px;color:var(--muted)}
+.prod-venta{font-size:14px;font-weight:bold;color:var(--cyan)}
+.prod-margen{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(29,158,117,.1);color:var(--success);border:1px solid rgba(29,158,117,.2)}
+
+/* FILTROS */
+.filtro-bar{display:flex;gap:5px;margin-bottom:10px;overflow-x:auto;padding-bottom:3px}
+.filtro-bar::-webkit-scrollbar{height:2px}
+.filtro-bar::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+.fb{padding:5px 12px;border-radius:20px;font-size:10px;cursor:pointer;border:1px solid #252525;background:transparent;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.fb.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.filtro-custom{display:none;gap:6px;margin-bottom:9px;align-items:center}
+.filtro-custom.on{display:flex}
+.filtro-custom input{flex:1;background:var(--d3);border:1px solid #252525;border-radius:7px;color:var(--cream);padding:7px 8px;font-size:12px;outline:none}
+.filtro-custom .bp{width:auto;padding:7px 12px;font-size:11px}
+
+/* GANANCIAS */
+.gcard{border-radius:9px;padding:11px 13px;margin-bottom:7px}
+.gcard-owner{background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.18)}
+.gcard-barber{background:rgba(0,200,224,.06);border:1px solid rgba(0,200,224,.18)}
+.gcard-title{font-size:11px;font-weight:bold;margin-bottom:6px}
+.gcard-row{display:flex;justify-content:space-between;font-size:11px;padding:4px 0}
+.gcard-lbl{color:var(--muted)}
+.gcard-val{font-weight:bold}
+.g-total-box{background:rgba(29,158,117,.06);border:1px solid rgba(29,158,117,.18);border-radius:9px;padding:11px 13px;margin-bottom:7px}
+
+/* CONFIG */
+.cfg-row{display:flex;align-items:center;gap:8px;background:var(--d2);border:1px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:6px}
+.cfg-icon{font-size:18px;flex-shrink:0}
+.cfg-info{flex:1}
+.cfg-label{font-size:12px;color:var(--cream)}
+.cfg-sub{font-size:9px;color:var(--muted)}
+.cfg-edit{background:none;border:1px solid #252525;border-radius:6px;color:#5BB3FF;font-size:10px;padding:4px 9px;cursor:pointer}
+
+/* NAV */
+.nav{display:grid;background:var(--d2);border-top:1px solid #1e1e1e;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav.t5{grid-template-columns:repeat(5,1fr)}
+.nav.t4{grid-template-columns:repeat(4,1fr)}
+.nav.t3{grid-template-columns:repeat(3,1fr)}
+.nb{padding:8px 2px 6px;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--muted);font-size:8px;letter-spacing:.3px;text-transform:uppercase}
+.nb i{display:block;font-size:16px;margin-bottom:2px}
+.nb.on,.nb:active{color:var(--cyan)}
+
+/* MODAL */
+.mo{display:none;position:absolute;inset:0;background:rgba(0,0,0,.82);z-index:20;align-items:flex-end}
+.mo.on{display:flex}
+.mbox{background:var(--d2);border-radius:14px 14px 0 0;padding:14px 14px calc(env(safe-area-inset-bottom,0px) + 20px);width:100%;border-top:1px solid #2a2a2a;max-height:92%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mt{font-size:13px;color:#5BB3FF;margin-bottom:12px;font-weight:bold}
+.mc{float:right;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px}
+.mbox .fi{margin-bottom:8px}
+.mbox label{font-size:9px;color:var(--muted);display:block;margin-bottom:3px;letter-spacing:1px;text-transform:uppercase}
+.mbox select{width:100%;background:var(--d3);border:1px solid #252525;border-radius:8px;color:var(--cream);padding:10px 11px;font-size:16px;margin-bottom:8px;outline:none;-webkit-appearance:none}
+.mbox select option{background:var(--d2)}
+.g2f{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* CLIENTE BOOKING */
+.bkw{flex:1;padding:12px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.bkt{font-size:15px;color:#5BB3FF;text-transform:uppercase;letter-spacing:2px;font-style:italic}
+.bks{font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:11px}
+.bsrv{display:flex;align-items:center;justify-content:space-between;background:var(--d2);border:1px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:5px;cursor:pointer}
+.bsrv.sel{border-color:var(--cyan);background:rgba(0,200,224,.04)}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:10px}
+.sl{background:var(--d2);border:1px solid #222;border-radius:8px;padding:8px 3px;text-align:center;cursor:pointer;font-size:11px}
+.sl.sel{border-color:var(--cyan);color:var(--cyan)}
+.sl.off{color:#2a2a2a;border-color:#181818;cursor:not-allowed}
+.cfb{background:rgba(0,200,224,.05);border:1px solid rgba(0,200,224,.15);border-radius:9px;padding:12px;margin-bottom:10px}
+.cfr{display:flex;justify-content:space-between;font-size:11px;padding:3px 0}
+
+/* SHEETS CONFIG */
+.sheets-box{background:rgba(30,144,255,.05);border:1px solid rgba(30,144,255,.2);border-radius:9px;padding:12px;margin-bottom:10px}
+.sheets-status{display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot.connected{background:var(--success)}
+.dot.disconnected{background:var(--muted)}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+  <div class="hdr-logo">✂</div>
+  <div><div class="hdr-name">Freestyle Barbershop</div><div class="hdr-sub">Urban Grooming · Bogotá</div></div>
+  <div class="hdr-right">
+    <div class="hdr-role rp" id="hdr-role">Público</div>
+    <button class="lo" id="lo-btn" onclick="doLogout()">Salir</button>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="screen on" id="sc-login">
+  <div class="lw">
+    <div style="font-size:40px">✂</div>
+    <div class="lt">Freestyle</div>
+    <div class="ls">Barbershop · Urban Grooming</div>
+    <div class="lbox">
+      <div style="font-size:10px;color:var(--muted);text-align:center">Acceso del equipo</div>
+      <input class="fi" type="text" id="li-u" placeholder="Usuario" autocomplete="username" autocorrect="off" autocapitalize="none">
+      <input class="fi" type="password" id="li-p" placeholder="Contraseña" autocomplete="current-password">
+      <div class="err" id="li-err"></div>
+      <button class="btn bp" onclick="doLogin()">Ingresar</button>
+      <button class="btn bo" onclick="goClient()">Soy cliente — agendar cita</button>
+    </div>
+    <div class="hint" id="hint-block"></div>
+  </div>
+</div>
+
+<!-- DUEÑO -->
+<div class="screen" id="sc-owner">
+  <div class="tab on" id="ow-caja">
+    <div id="ow-filtro"></div>
+    <div class="sec">Resumen</div>
+    <div class="g2">
+      <div class="kc"><div class="kl">Servicios</div><div class="kv g" id="ow-ing">$0</div><div class="ks" id="ow-ns">0 servicios</div></div>
+      <div class="kc"><div class="kl">Productos</div><div class="kv p" id="ow-vprod">$0</div><div class="ks" id="ow-np">0 items</div></div>
+      <div class="kc"><div class="kl">Costo operación</div><div class="kv r" id="ow-op">$0</div></div>
+      <div class="kc"><div class="kl">Otros gastos</div><div class="kv r" id="ow-gas">$0</div></div>
+      <div class="kc" style="grid-column:span 2"><div class="kl" style="text-align:center">Utilidad neta</div><div class="bn y" id="ow-util">$0</div></div>
+    </div>
+    <div class="sec">Por servicio</div>
+    <div class="bw"><div class="bl"><span>Corte Básico</span><span id="bl-cb">$0</span></div><div class="bbg"><div class="bf" id="bf-cb" style="width:0%;background:var(--blue)"></div></div></div>
+    <div class="bw"><div class="bl"><span>Corte Shaver</span><span id="bl-cs">$0</span></div><div class="bbg"><div class="bf" id="bf-cs" style="width:0%;background:var(--cyan)"></div></div></div>
+    <div class="bw"><div class="bl"><span>Barba Freestyle</span><span id="bl-bf">$0</span></div><div class="bbg"><div class="bf" id="bf-bf" style="width:0%;background:var(--success)"></div></div></div>
+    <div class="bw"><div class="bl"><span>Cejas</span><span id="bl-pf">$0</span></div><div class="bbg"><div class="bf" id="bf-pf" style="width:0%;background:var(--purple)"></div></div></div>
+    <div class="bw"><div class="bl"><span>Combos</span><span id="bl-co">$0</span></div><div class="bbg"><div class="bf" id="bf-co" style="width:0%;background:var(--gold)"></div></div></div>
+    <div class="divx"></div>
+    <div class="sec">Movimientos</div>
+    <div class="tl" id="ow-movs"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin movimientos</div></div>
+    <div style="margin-top:10px;padding-bottom:6px">
+      <button class="btn bp" onclick="openMo('mo-serv')">✂ Cobrar servicio</button>
+      <button class="btn bo" style="margin-top:5px" onclick="openMo('mo-venta')">🛍 Vender producto</button>
+      <button class="btn bo" style="margin-top:5px;color:var(--danger);border-color:rgba(216,90,48,.25)" onclick="openMo('mo-gasto')">− Registrar gasto</button>
+    </div>
+  </div>
+  <div class="tab" id="ow-ganancias">
+    <div id="ow-g-filtro"></div>
+    <div class="g-total-box">
+      <div class="gcard-row"><span class="gcard-lbl">Ingresos totales</span><span class="gcard-val g" id="gn-total-ing">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">− Comisiones barberos</span><span class="gcard-val r" id="gn-total-com">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">− Costo operación (día)</span><span class="gcard-val r" id="gn-op-dia">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">− Otros gastos</span><span class="gcard-val r" id="gn-gastos">$0</span></div>
+      <div style="border-top:1px solid rgba(29,158,117,.2);margin-top:5px;padding-top:5px">
+        <div class="gcard-row"><span class="gcard-lbl" style="color:var(--cream);font-weight:bold">Ganancia neta</span><span class="gcard-val y" id="gn-neta" style="font-size:16px">$0</span></div>
+      </div>
+    </div>
+    <div class="sec">Socios</div>
+    <div class="gcard gcard-owner">
+      <div class="gcard-title" style="color:var(--gold)">💰 División entre socios</div>
+      <div class="gcard-row"><span class="gcard-lbl" id="gn-s1-label">Socio 1 (50%)</span><span class="gcard-val y" id="gn-socio1">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl" id="gn-s2-label">Socio 2 (50%)</span><span class="gcard-val y" id="gn-socio2">$0</span></div>
+    </div>
+    <div class="sec">Barberos</div>
+    <div class="gcard gcard-barber">
+      <div class="gcard-title" style="color:var(--cyan)">✂ Comisiones</div>
+      <div class="gcard-row"><span class="gcard-lbl" id="gn-b1-label">Barbero Principal (60%)</span><span class="gcard-val c" id="gn-b1">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl" id="gn-b2-label">Barbero 2 (50%)</span><span class="gcard-val c" id="gn-b2">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl" id="gn-b3-label">Barbero 3 (50%)</span><span class="gcard-val c" id="gn-b3">$0</span></div>
+      <div style="border-top:1px solid rgba(0,200,224,.15);margin-top:4px;padding-top:4px">
+        <div class="gcard-row"><span class="gcard-lbl" style="color:var(--cream)">Total barberos</span><span class="gcard-val c" id="gn-b-total">$0</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="tab" id="ow-tienda">
+    <div class="sec">Catálogo</div>
+    <div id="prod-lista-ow"></div>
+    <button class="btn bp" style="margin-top:6px" onclick="openMo('mo-prod')">+ Agregar producto</button>
+    <div class="divx"></div>
+    <div class="g2">
+      <div class="kc"><div class="kl">Productos</div><div class="kv b" id="n-prods">0</div></div>
+      <div class="kc"><div class="kl">Vendido</div><div class="kv p" id="n-vprod-hoy">$0</div></div>
+    </div>
+  </div>
+  <div class="tab" id="ow-costos">
+    <div class="sec">Costos fijos mensuales</div>
+    <div class="card">
+      <div class="row"><span style="font-size:11px">🏠 Alquiler</span><span style="color:var(--danger);font-weight:bold;font-size:11px" id="op-alquiler">$0</span></div>
+      <div class="row"><span style="font-size:11px">💡 Servicios públicos</span><span style="color:var(--danger);font-weight:bold;font-size:11px" id="op-servicios">$0</span></div>
+      <div class="row"><span style="font-size:11px">📶 Internet / celular</span><span style="color:var(--danger);font-weight:bold;font-size:11px" id="op-internet">$0</span></div>
+      <div class="row"><span style="font-size:11px">🧴 Insumos</span><span style="color:var(--danger);font-weight:bold;font-size:11px" id="op-insumos">$0</span></div>
+      <div class="row"><span style="font-size:11px">📦 Otros</span><span style="color:var(--danger);font-weight:bold;font-size:11px" id="op-otros">$0</span></div>
+    </div>
+    <div class="kc" style="margin-bottom:7px"><div class="kl" style="text-align:center">Total mensual</div><div class="bn r" id="op-total">$0</div></div>
+    <div class="kc" style="margin-bottom:7px"><div class="kl" style="text-align:center">Costo por día hábil</div><div class="bn y" id="op-dia" style="font-size:18px">$0</div></div>
+    <button class="btn bp" onclick="openMo('mo-costo-op')">+ Registrar costo fijo</button>
+    <button class="btn bo" style="margin-top:5px" onclick="openMo('mo-gasto')">+ Gasto puntual</button>
+  </div>
+  <div class="tab" id="ow-config">
+    <div class="sec">Google Sheets</div>
+    <div class="sheets-box">
+      <div class="sheets-status"><div class="dot disconnected" id="sheets-dot"></div><span id="sheets-status-txt" style="color:var(--muted)">No conectado</span></div>
+      <label>URL del Apps Script</label>
+      <input class="fi" type="url" id="sheets-url" placeholder="https://script.google.com/macros/s/.../exec" style="margin-bottom:8px;font-size:12px">
+      <button class="btn bp" onclick="guardarSheetsUrl()">Guardar y conectar</button>
+    </div>
+    <div class="sec">Socios</div>
+    <div id="cfg-socios"></div>
+    <div class="sec">Equipo</div>
+    <div id="cfg-barberos"></div>
+    <div class="sec">Agenda pública</div>
+    <div class="card">
+      <div style="font-size:11px;color:var(--muted);line-height:1.7">Comparte este link con tus clientes para que agenden cita:</div>
+      <div style="font-size:10px;color:var(--cyan);margin-top:5px;word-break:break-all" id="public-link">—</div>
+      <button class="btn bo" style="margin-top:8px;font-size:11px" onclick="copiarLink()">Copiar link</button>
+    </div>
+  </div>
+  <nav class="nav t5">
+    <button class="nb on" onclick="owTab('caja',this)"><i class="ti ti-cash"></i>Caja</button>
+    <button class="nb" onclick="owTab('ganancias',this);renderGanancias()"><i class="ti ti-chart-pie"></i>Ganancias</button>
+    <button class="nb" onclick="owTab('tienda',this);renderTiendaOwner()"><i class="ti ti-shopping-bag"></i>Tienda</button>
+    <button class="nb" onclick="owTab('costos',this);renderCostos()"><i class="ti ti-receipt"></i>Costos</button>
+    <button class="nb" onclick="owTab('config',this);renderConfig()"><i class="ti ti-settings"></i>Config</button>
+  </nav>
+</div>
+
+<!-- BARBERO PRINCIPAL b1 -->
+<div class="screen" id="sc-b1">
+  <div class="tab on" id="b1-agenda">
+    <div class="sec" id="b1-titulo">Mi agenda</div>
+    <div id="b1-citas"><div class="aslot" style="border:1px dashed #252525;background:transparent"><div class="atime"><div class="ahour">—</div></div><div style="flex:1"><div style="font-size:11px;color:var(--muted)">Sin citas hoy</div></div></div></div>
+    <button class="btn bp" style="margin-top:8px" onclick="openMo('mo-serv-b1')">✂ Cobrar servicio</button>
+    <div class="divx"></div>
+    <div class="g2">
+      <div class="kc"><div class="kl">Completados</div><div class="kv g" id="b1-hechos">0</div></div>
+      <div class="kc"><div class="kl">Mi comisión est.</div><div class="kv y" id="b1-com-est">$0</div></div>
+    </div>
+  </div>
+  <div class="tab" id="b1-caja">
+    <div id="b1-filtro"></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Total cobrado</div><div class="bn g" id="b1-total">$0</div></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Mi comisión (60%)</div><div class="bn y" id="b1-com">$0</div></div>
+    <div class="tl" id="b1-movs"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin registros</div></div>
+  </div>
+  <div class="tab" id="b1-tienda">
+    <div class="sec">Vender producto</div>
+    <div id="prod-lista-b1"></div>
+    <div class="divx"></div>
+    <div class="kc"><div class="kl" style="text-align:center">Vendido hoy</div><div class="bn p" id="b1-vprod">$0</div></div>
+  </div>
+  <div class="tab" id="b1-liquidacion">
+    <div id="b1-liq-filtro"></div>
+    <div class="gcard gcard-barber">
+      <div class="gcard-row"><span class="gcard-lbl">Cortes realizados</span><span class="gcard-val c" id="b1l-n">0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Total generado</span><span class="gcard-val g" id="b1l-ing">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Mi porcentaje</span><span class="gcard-val c">60%</span></div>
+      <div style="border-top:1px solid rgba(0,200,224,.15);margin-top:4px;padding-top:4px">
+        <div class="gcard-row"><span class="gcard-lbl" style="color:var(--cream);font-weight:bold">Mi comisión</span><span class="gcard-val y" id="b1l-total" style="font-size:16px">$0</span></div>
+      </div>
+    </div>
+    <div class="sec">Detalle</div>
+    <div id="b1l-detalle"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin servicios</div></div>
+  </div>
+  <nav class="nav t4">
+    <button class="nb on" onclick="brXTab('b1','agenda',this)"><i class="ti ti-calendar"></i>Agenda</button>
+    <button class="nb" onclick="brXTab('b1','caja',this)"><i class="ti ti-cash"></i>Mi Caja</button>
+    <button class="nb" onclick="brXTab('b1','tienda',this);renderTiendaBarbero('b1')"><i class="ti ti-shopping-bag"></i>Tienda</button>
+    <button class="nb" onclick="brXTab('b1','liquidacion',this)"><i class="ti ti-coin"></i>Liquidación</button>
+  </nav>
+</div>
+
+<!-- BARBERO 2 -->
+<div class="screen" id="sc-b2">
+  <div class="tab on" id="b2-agenda">
+    <div class="sec" id="b2-titulo">Mi agenda</div>
+    <div id="b2-citas"><div class="aslot" style="border:1px dashed #252525;background:transparent"><div class="atime"><div class="ahour">—</div></div><div style="flex:1"><div style="font-size:11px;color:var(--muted)">Sin citas hoy</div></div></div></div>
+    <button class="btn bp" style="margin-top:8px" onclick="openMo('mo-serv-b2')">✂ Cobrar servicio</button>
+    <div class="divx"></div>
+    <div class="g2">
+      <div class="kc"><div class="kl">Completados</div><div class="kv g" id="b2-hechos">0</div></div>
+      <div class="kc"><div class="kl">Mi comisión est.</div><div class="kv y" id="b2-com-est">$0</div></div>
+    </div>
+  </div>
+  <div class="tab" id="b2-caja">
+    <div id="b2-filtro"></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Total cobrado</div><div class="bn g" id="b2-total">$0</div></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Mi comisión (50%)</div><div class="bn y" id="b2-com">$0</div></div>
+    <div class="tl" id="b2-movs"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin registros</div></div>
+  </div>
+  <div class="tab" id="b2-liquidacion">
+    <div id="b2-liq-filtro"></div>
+    <div class="gcard gcard-barber">
+      <div class="gcard-row"><span class="gcard-lbl">Cortes realizados</span><span class="gcard-val c" id="b2l-n">0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Total generado</span><span class="gcard-val g" id="b2l-ing">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Mi porcentaje</span><span class="gcard-val c">50%</span></div>
+      <div style="border-top:1px solid rgba(0,200,224,.15);margin-top:4px;padding-top:4px">
+        <div class="gcard-row"><span class="gcard-lbl" style="color:var(--cream);font-weight:bold">Mi comisión</span><span class="gcard-val y" id="b2l-total" style="font-size:16px">$0</span></div>
+      </div>
+    </div>
+    <div id="b2l-detalle"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin servicios</div></div>
+  </div>
+  <nav class="nav t3">
+    <button class="nb on" onclick="brXTab('b2','agenda',this)"><i class="ti ti-calendar"></i>Agenda</button>
+    <button class="nb" onclick="brXTab('b2','caja',this)"><i class="ti ti-cash"></i>Mi Caja</button>
+    <button class="nb" onclick="brXTab('b2','liquidacion',this)"><i class="ti ti-coin"></i>Liquidación</button>
+  </nav>
+</div>
+
+<!-- BARBERO 3 -->
+<div class="screen" id="sc-b3">
+  <div class="tab on" id="b3-agenda">
+    <div class="sec" id="b3-titulo">Mi agenda</div>
+    <div id="b3-citas"><div class="aslot" style="border:1px dashed #252525;background:transparent"><div class="atime"><div class="ahour">—</div></div><div style="flex:1"><div style="font-size:11px;color:var(--muted)">Sin citas hoy</div></div></div></div>
+    <button class="btn bp" style="margin-top:8px" onclick="openMo('mo-serv-b3')">✂ Cobrar servicio</button>
+    <div class="divx"></div>
+    <div class="g2">
+      <div class="kc"><div class="kl">Completados</div><div class="kv g" id="b3-hechos">0</div></div>
+      <div class="kc"><div class="kl">Mi comisión est.</div><div class="kv y" id="b3-com-est">$0</div></div>
+    </div>
+  </div>
+  <div class="tab" id="b3-caja">
+    <div id="b3-filtro"></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Total cobrado</div><div class="bn g" id="b3-total">$0</div></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Mi comisión (50%)</div><div class="bn y" id="b3-com">$0</div></div>
+    <div class="tl" id="b3-movs"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin registros</div></div>
+  </div>
+  <div class="tab" id="b3-liquidacion">
+    <div id="b3-liq-filtro"></div>
+    <div class="gcard gcard-barber">
+      <div class="gcard-row"><span class="gcard-lbl">Cortes realizados</span><span class="gcard-val c" id="b3l-n">0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Total generado</span><span class="gcard-val g" id="b3l-ing">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Mi porcentaje</span><span class="gcard-val c">50%</span></div>
+      <div style="border-top:1px solid rgba(0,200,224,.15);margin-top:4px;padding-top:4px">
+        <div class="gcard-row"><span class="gcard-lbl" style="color:var(--cream);font-weight:bold">Mi comisión</span><span class="gcard-val y" id="b3l-total" style="font-size:16px">$0</span></div>
+      </div>
+    </div>
+    <div id="b3l-detalle"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin servicios</div></div>
+  </div>
+  <nav class="nav t3">
+    <button class="nb on" onclick="brXTab('b3','agenda',this)"><i class="ti ti-calendar"></i>Agenda</button>
+    <button class="nb" onclick="brXTab('b3','caja',this)"><i class="ti ti-cash"></i>Mi Caja</button>
+    <button class="nb" onclick="brXTab('b3','liquidacion',this)"><i class="ti ti-coin"></i>Liquidación</button>
+  </nav>
+</div>
+
+<!-- CLIENTE -->
+<div class="screen" id="sc-client">
+  <div class="bkw" id="bk-s1">
+    <div class="bkt">Freestyle Barbershop</div>
+    <div class="bks">Agendá tu cita · Urban Grooming</div>
+    <div class="sec">Elige tu servicio</div>
+    <div class="bsrv" onclick="selSrv(this,'Corte Básico',18000)"><span style="font-size:12px">Corte Básico</span><span style="font-size:13px;font-weight:bold;color:var(--cyan)">$18,000</span></div>
+    <div class="bsrv" onclick="selSrv(this,'Corte con Shaver',20000)"><span style="font-size:12px">Corte con Shaver</span><span style="font-size:13px;font-weight:bold;color:var(--cyan)">$20,000</span></div>
+    <div class="bsrv" onclick="selSrv(this,'Barba Freestyle',10000)"><span style="font-size:12px">Barba Freestyle</span><span style="font-size:13px;font-weight:bold;color:var(--cyan)">$10,000</span></div>
+    <div class="bsrv" onclick="selSrv(this,'Perfilado de Cejas',4000)"><span style="font-size:12px">Perfilado de Cejas</span><span style="font-size:13px;font-weight:bold;color:var(--cyan)">$4,000</span></div>
+    <div style="margin:7px 0 4px;font-size:9px;color:var(--cyan);letter-spacing:1px;text-transform:uppercase">Combos especiales</div>
+    <div class="bsrv" onclick="selSrv(this,'Combo Pro',22000)"><div><div style="font-size:12px">Combo Pro</div><div style="font-size:9px;color:var(--muted)">Corte + Cejas</div></div><span style="font-size:13px;font-weight:bold;color:var(--gold)">$22,000</span></div>
+    <div class="bsrv" onclick="selSrv(this,'Combo Dúo',26000)"><div><div style="font-size:12px">Combo Dúo</div><div style="font-size:9px;color:var(--muted)">Corte + Barba</div></div><span style="font-size:13px;font-weight:bold;color:var(--gold)">$26,000</span></div>
+    <div class="bsrv" onclick="selSrv(this,'Combo Full Freestyle',30000)"><div><div style="font-size:12px">Combo Full Freestyle</div><div style="font-size:9px;color:var(--muted)">Corte + Barba + Cejas</div></div><span style="font-size:13px;font-weight:bold;color:var(--gold)">$30,000</span></div>
+    <div id="bk-e1" style="font-size:10px;color:var(--danger);text-align:center;min-height:14px;margin-top:3px"></div>
+    <button class="btn bp" style="margin-top:7px" onclick="bkN1()">Continuar</button>
+    <button class="btn bo" style="margin-top:4px" onclick="goLogin()">Soy del equipo — iniciar sesión</button>
+  </div>
+  <div class="bkw" id="bk-s2" style="display:none">
+    <div class="bkt">Elige tu horario</div>
+    <div class="bks" id="bk-sl">—</div>
+    <div class="sg">
+      <div class="sl" onclick="selSlot(this,'8:00 AM')">8:00 AM</div>
+      <div class="sl off">9:00 AM</div>
+      <div class="sl" onclick="selSlot(this,'9:30 AM')">9:30 AM</div>
+      <div class="sl" onclick="selSlot(this,'11:00 AM')">11:00 AM</div>
+      <div class="sl" onclick="selSlot(this,'12:00 PM')">12:00 PM</div>
+      <div class="sl" onclick="selSlot(this,'1:00 PM')">1:00 PM</div>
+      <div class="sl" onclick="selSlot(this,'2:00 PM')">2:00 PM</div>
+      <div class="sl" onclick="selSlot(this,'3:00 PM')">3:00 PM</div>
+      <div class="sl" onclick="selSlot(this,'4:00 PM')">4:00 PM</div>
+      <div class="sl" onclick="selSlot(this,'5:00 PM')">5:00 PM</div>
+      <div class="sl" onclick="selSlot(this,'6:00 PM')">6:00 PM</div>
+      <div class="sl" onclick="selSlot(this,'7:00 PM')">7:00 PM</div>
+    </div>
+    <input class="fi" type="text" id="bk-nom" placeholder="Tu nombre" style="width:100%;margin-bottom:6px">
+    <input class="fi" type="tel" id="bk-cel" placeholder="WhatsApp" style="width:100%;margin-bottom:6px">
+    <div id="bk-e2" style="font-size:10px;color:var(--danger);text-align:center;min-height:14px"></div>
+    <button class="btn bp" onclick="bkN2()">Ver resumen</button>
+    <button class="btn bo" style="margin-top:4px" onclick="bkBack()">Volver</button>
+  </div>
+  <div class="bkw" id="bk-s3" style="display:none">
+    <div class="cfb">
+      <div style="font-size:10px;color:var(--cyan);font-weight:bold;text-align:center;margin-bottom:8px;letter-spacing:1px">RESUMEN DE CITA</div>
+      <div class="cfr"><span style="color:var(--muted)">Servicio</span><span style="font-weight:bold" id="cf-srv">—</span></div>
+      <div class="cfr"><span style="color:var(--muted)">Hora</span><span style="font-weight:bold" id="cf-hora">—</span></div>
+      <div class="cfr"><span style="color:var(--muted)">Cliente</span><span style="font-weight:bold" id="cf-nom">—</span></div>
+      <div class="cfr"><span style="color:var(--muted)">Valor</span><span style="font-weight:bold;color:var(--cyan)" id="cf-precio">—</span></div>
+    </div>
+    <button class="btn bp" onclick="bkFin()">Confirmar y agendar</button>
+    <button class="btn bo" style="margin-top:4px" onclick="bkBack2()">Volver</button>
+  </div>
+  <div id="bk-ok" style="display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;gap:10px">
+    <div style="font-size:44px">✂</div>
+    <div style="font-size:15px;color:var(--success);font-weight:bold;letter-spacing:1px">¡Cita agendada!</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.8" id="bk-ok-msg"></div>
+    <button class="btn bp" style="max-width:200px;margin-top:8px" onclick="bkReset()">Agendar otra cita</button>
+  </div>
+</div>
+
+<!-- MODALES -->
+<div class="mo" id="mo-serv"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-serv')">✕</button>
+  <div class="mt">✂ Cobrar servicio</div>
+  <label>Barbero</label>
+  <select id="sv-bar"></select>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:5px">INDIVIDUALES</div>
+  <button class="sbtn" onclick="cobrar('Corte Básico',18000,'cb')"><span style="font-size:11px">Corte Básico</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$18,000</span></button>
+  <button class="sbtn" onclick="cobrar('Corte con Shaver',20000,'cs')"><span style="font-size:11px">Corte con Shaver</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$20,000</span></button>
+  <button class="sbtn" onclick="cobrar('Barba Freestyle',10000,'bf')"><span style="font-size:11px">Barba Freestyle</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$10,000</span></button>
+  <button class="sbtn" onclick="cobrar('Perfilado de Cejas',4000,'pf')"><span style="font-size:11px">Perfilado de Cejas</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$4,000</span></button>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:1px;margin:6px 0 5px">COMBOS</div>
+  <button class="sbtn" onclick="cobrar('Combo Pro',22000,'co')"><div><div style="font-size:11px">Combo Pro</div><div style="font-size:9px;color:var(--cyan)">Corte+Cejas</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$22,000</span></button>
+  <button class="sbtn" onclick="cobrar('Combo Dúo',26000,'co')"><div><div style="font-size:11px">Combo Dúo</div><div style="font-size:9px;color:var(--cyan)">Corte+Barba</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$26,000</span></button>
+  <button class="sbtn" onclick="cobrar('Combo Full Freestyle',30000,'co')"><div><div style="font-size:11px">Combo Full</div><div style="font-size:9px;color:var(--cyan)">Corte+Barba+Cejas</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$30,000</span></button>
+  <button class="btn bo" style="margin-top:6px" onclick="closeMo('mo-serv')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-serv-b1"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-serv-b1')">✕</button>
+  <div class="mt">✂ Cobrar servicio</div>
+  <button class="sbtn" onclick="cobrarBr('Corte Básico',18000,'cb','b1')"><span style="font-size:11px">Corte Básico</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$18,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Corte con Shaver',20000,'cs','b1')"><span style="font-size:11px">Corte con Shaver</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$20,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Barba Freestyle',10000,'bf','b1')"><span style="font-size:11px">Barba Freestyle</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$10,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Perfilado de Cejas',4000,'pf','b1')"><span style="font-size:11px">Perfilado de Cejas</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$4,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Pro',22000,'co','b1')"><div><div style="font-size:11px">Combo Pro</div><div style="font-size:9px;color:var(--cyan)">Corte+Cejas</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$22,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Dúo',26000,'co','b1')"><div><div style="font-size:11px">Combo Dúo</div><div style="font-size:9px;color:var(--cyan)">Corte+Barba</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$26,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Full Freestyle',30000,'co','b1')"><div><div style="font-size:11px">Combo Full</div><div style="font-size:9px;color:var(--cyan)">Corte+Barba+Cejas</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$30,000</span></button>
+  <button class="btn bo" style="margin-top:6px" onclick="closeMo('mo-serv-b1')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-serv-b2"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-serv-b2')">✕</button>
+  <div class="mt">✂ Cobrar servicio</div>
+  <button class="sbtn" onclick="cobrarBr('Corte Básico',18000,'cb','b2')"><span style="font-size:11px">Corte Básico</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$18,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Corte con Shaver',20000,'cs','b2')"><span style="font-size:11px">Corte con Shaver</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$20,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Barba Freestyle',10000,'bf','b2')"><span style="font-size:11px">Barba Freestyle</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$10,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Perfilado de Cejas',4000,'pf','b2')"><span style="font-size:11px">Perfilado de Cejas</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$4,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Pro',22000,'co','b2')"><span style="font-size:11px">Combo Pro</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$22,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Dúo',26000,'co','b2')"><span style="font-size:11px">Combo Dúo</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$26,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Full Freestyle',30000,'co','b2')"><span style="font-size:11px">Combo Full</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$30,000</span></button>
+  <button class="btn bo" style="margin-top:6px" onclick="closeMo('mo-serv-b2')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-serv-b3"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-serv-b3')">✕</button>
+  <div class="mt">✂ Cobrar servicio</div>
+  <button class="sbtn" onclick="cobrarBr('Corte Básico',18000,'cb','b3')"><span style="font-size:11px">Corte Básico</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$18,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Corte con Shaver',20000,'cs','b3')"><span style="font-size:11px">Corte con Shaver</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$20,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Barba Freestyle',10000,'bf','b3')"><span style="font-size:11px">Barba Freestyle</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$10,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Perfilado de Cejas',4000,'pf','b3')"><span style="font-size:11px">Perfilado de Cejas</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$4,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Pro',22000,'co','b3')"><span style="font-size:11px">Combo Pro</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$22,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Dúo',26000,'co','b3')"><span style="font-size:11px">Combo Dúo</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$26,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Full Freestyle',30000,'co','b3')"><span style="font-size:11px">Combo Full</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$30,000</span></button>
+  <button class="btn bo" style="margin-top:6px" onclick="closeMo('mo-serv-b3')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-venta"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-venta')">✕</button>
+  <div class="mt">🛍 Registrar venta</div>
+  <label>Producto</label><select id="vt-prod-sel"></select>
+  <label>Cantidad</label><input class="fi" type="number" id="vt-cant" value="1" min="1">
+  <button class="btn bp" onclick="registrarVenta('owner')">Registrar</button>
+  <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-venta')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-venta-b1"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-venta-b1')">✕</button>
+  <div class="mt">🛍 Vender producto</div>
+  <label>Producto</label><select id="vt-prod-b1"></select>
+  <label>Cantidad</label><input class="fi" type="number" id="vt-cant-b1" value="1" min="1">
+  <button class="btn bp" onclick="registrarVenta('b1')">Registrar</button>
+  <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-venta-b1')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-gasto"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-gasto')">✕</button>
+  <div class="mt">Registrar gasto</div>
+  <label>Descripción</label><input class="fi" type="text" id="g-desc" placeholder="Ej: Insumos">
+  <label>Monto (COP)</label><input class="fi" type="number" id="g-monto" placeholder="50000">
+  <button class="btn bp" onclick="registrarGasto()">Guardar</button>
+  <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-gasto')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-costo-op"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-costo-op')">✕</button>
+  <div class="mt">Costo fijo mensual</div>
+  <label>Tipo</label>
+  <select id="co-tipo">
+    <option value="alquiler">🏠 Alquiler</option>
+    <option value="servicios">💡 Servicios públicos</option>
+    <option value="internet">📶 Internet / celular</option>
+    <option value="insumos">🧴 Insumos</option>
+    <option value="otros">📦 Otros</option>
+  </select>
+  <label>Monto mensual (COP)</label><input class="fi" type="number" id="co-monto" placeholder="1200000">
+  <button class="btn bp" onclick="registrarCostoOp()">Guardar</button>
+  <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-costo-op')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-prod"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-prod')">✕</button>
+  <div class="mt">Agregar producto</div>
+  <label>Nombre</label><input class="fi" type="text" id="p-nom" placeholder="Ej: Pipa cerámica">
+  <label>Categoría</label>
+  <select id="p-cat">
+    <option>💎 Piercings</option>
+    <option>🔥 Pipas</option>
+    <option>🌿 Accesorios</option>
+    <option>✂ Barbería</option>
+  </select>
+  <div class="g2f">
+    <div><label>Costo (COP)</label><input class="fi" type="number" id="p-costo" placeholder="10000"></div>
+    <div><label>Precio venta</label><input class="fi" type="number" id="p-venta" placeholder="30000"></div>
+  </div>
+  <label>Stock</label><input class="fi" type="number" id="p-stock" placeholder="5">
+  <button class="btn bp" onclick="agregarProducto()">Guardar</button>
+  <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-prod')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-edit-user"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-edit-user')">✕</button>
+  <div class="mt" id="eu-title">Editar usuario</div>
+  <label>Nombre visible</label><input class="fi" type="text" id="eu-nombre" placeholder="Ej: Juan García">
+  <label>Usuario (login)</label><input class="fi" type="text" id="eu-user" autocorrect="off" autocapitalize="none" placeholder="Ej: juan">
+  <label>Contraseña</label><input class="fi" type="password" id="eu-pass" placeholder="Mínimo 4 caracteres">
+  <input type="hidden" id="eu-id">
+  <button class="btn bp" onclick="guardarUser()">Guardar cambios</button>
+  <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-edit-user')">Cancelar</button>
+</div></div>
+</div>
+
+<script>
+// ── ESTADO ────────────────────────────────────────────────────────────────────
+let USERS={
+  dueno:{pass:'1234',role:'owner',nombre:'Dueño 1',socioId:'s1'},
+  socio2:{pass:'1234',role:'owner',nombre:'Dueño 2',socioId:'s2'},
+  barbero1:{pass:'1234',role:'b1',nombre:'Barbero Principal',pct:60},
+  barbero2:{pass:'1234',role:'b2',nombre:'Barbero 2',pct:50},
+  barbero3:{pass:'1234',role:'b3',nombre:'Barbero 3',pct:50}
+};
+let currentUser=null;
+let SHEETS_URL='';
+
+let S={
+  ing:0,gas:0,vprod:0,nprod:0,nsrv:0,ngst:0,
+  bars:{cb:0,cs:0,bf:0,pf:0,co:0},
+  movs:[],ncitas:0,
+  barberos:{
+    b1:{total:0,com:0,n:0,svcs:[],vprod:0},
+    b2:{total:0,com:0,n:0,svcs:[]},
+    b3:{total:0,com:0,n:0,svcs:[]}
+  },
+  costos:{alquiler:0,servicios:0,internet:0,insumos:0,otros:0},
+  productos:[
+    {nom:'Piercing Helix',cat:'💎 Piercings',costo:8000,venta:25000,stock:10},
+    {nom:'Pipa de vidrio',cat:'🔥 Pipas',costo:15000,venta:45000,stock:5},
+    {nom:'Grinder metálico',cat:'🌿 Accesorios',costo:12000,venta:35000,stock:8},
+    {nom:'Piercing Nostril',cat:'💎 Piercings',costo:5000,venta:18000,stock:12},
+    {nom:'Papel de liar',cat:'🌿 Accesorios',costo:1500,venta:4000,stock:30}
+  ]
+};
+let FILTROS={};
+
+function save(){
+  try{localStorage.setItem('fs_gh',JSON.stringify({S,USERS,SHEETS_URL}))}catch(e){}
+}
+function load(){
+  try{
+    const d=localStorage.getItem('fs_gh');
+    if(d){const p=JSON.parse(d);if(p.S)S={...S,...p.S};if(p.USERS)USERS={...USERS,...p.USERS};if(p.SHEETS_URL)SHEETS_URL=p.SHEETS_URL;}
+  }catch(e){}
+}
+
+function fmt(n){return '$'+Math.round(n).toLocaleString('es-CO')}
+function fmtK(n){return n>=1000?'$'+Math.round(n/1000)+'k':fmt(n)}
+function hora(){const n=new Date();return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0')}
+function fechaISO(){return new Date().toISOString().split('T')[0]}
+function pct(bid){return bid==='b1'?60:50}
+
+// ── SHEETS ────────────────────────────────────────────────────────────────────
+async function enviarSheets(data){
+  if(!SHEETS_URL)return;
+  try{
+    await fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(data)});
+  }catch(e){console.log('Sheets offline, dato guardado localmente')}
+}
+
+function guardarSheetsUrl(){
+  const url=document.getElementById('sheets-url').value.trim();
+  if(!url){return}
+  SHEETS_URL=url;save();
+  document.getElementById('sheets-dot').className='dot connected';
+  document.getElementById('sheets-status-txt').textContent='Conectado';
+  document.getElementById('sheets-status-txt').style.color='var(--success)';
+}
+
+function actualizarSheetsStatus(){
+  const dot=document.getElementById('sheets-dot');
+  const txt=document.getElementById('sheets-status-txt');
+  const inp=document.getElementById('sheets-url');
+  if(SHEETS_URL){
+    dot.className='dot connected';txt.textContent='Conectado';txt.style.color='var(--success)';inp.value=SHEETS_URL;
+  } else {
+    dot.className='dot disconnected';txt.textContent='No conectado';txt.style.color='var(--muted)';
+  }
+}
+
+// ── NAVEGACIÓN ────────────────────────────────────────────────────────────────
+function goScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
+function openMo(id){document.getElementById(id).classList.add('on')}
+function closeMo(id){document.getElementById(id).classList.remove('on')}
+function goLogin(){goScreen('sc-login');document.getElementById('hdr-role').className='hdr-role rp';document.getElementById('hdr-role').textContent='Público';document.getElementById('lo-btn').style.display='none';currentUser=null;}
+function goClient(){goScreen('sc-client');document.getElementById('hdr-role').className='hdr-role rp';document.getElementById('hdr-role').textContent='Cliente';document.getElementById('lo-btn').style.display='none';}
+function doLogout(){goLogin()}
+
+function doLogin(){
+  const u=document.getElementById('li-u').value.trim().toLowerCase();
+  const p=document.getElementById('li-p').value;
+  const err=document.getElementById('li-err');
+  const match=Object.entries(USERS).find(([k,v])=>k===u&&v.pass===p);
+  if(!match){err.textContent='Usuario o contraseña incorrectos';return}
+  err.textContent='';currentUser={key:match[0],...match[1]};
+  document.getElementById('li-u').value='';document.getElementById('li-p').value='';
+  document.getElementById('lo-btn').style.display='block';
+  const roleEl=document.getElementById('hdr-role');
+  if(currentUser.role==='owner'){
+    roleEl.className='hdr-role ro';roleEl.textContent=currentUser.nombre;
+    goScreen('sc-owner');buildFiltros('owner');renderOwner();renderTiendaOwner();
+  } else {
+    const bid=currentUser.role;
+    roleEl.className='hdr-role rb';roleEl.textContent=currentUser.nombre;
+    goScreen('sc-'+bid);
+    document.getElementById(bid+'-titulo').textContent='Mi agenda · '+currentUser.nombre;
+    buildFiltros(bid);renderBarber(bid);
+    if(bid==='b1')renderTiendaBarbero('b1');
+  }
+}
+
+function owTab(t,btn){
+  ['caja','ganancias','tienda','costos','config'].forEach(id=>{const el=document.getElementById('ow-'+id);if(el)el.classList.remove('on')});
+  document.querySelectorAll('#sc-owner .nb').forEach(b=>b.classList.remove('on'));
+  const el=document.getElementById('ow-'+t);if(el)el.classList.add('on');if(btn)btn.classList.add('on');
+}
+function brXTab(bid,t,btn){
+  ['agenda','caja','tienda','liquidacion'].forEach(id=>{const el=document.getElementById(bid+'-'+id);if(el)el.classList.remove('on')});
+  document.querySelectorAll('#sc-'+bid+' .nb').forEach(b=>b.classList.remove('on'));
+  const el=document.getElementById(bid+'-'+t);if(el)el.classList.add('on');if(btn)btn.classList.add('on');
+}
+
+// ── FILTROS ───────────────────────────────────────────────────────────────────
+function buildFiltros(ctx){
+  FILTROS[ctx]={modo:'hoy',desde:null,hasta:null};
+  const targets={owner:['ow-filtro','ow-g-filtro'],b1:['b1-filtro','b1-liq-filtro'],b2:['b2-filtro','b2-liq-filtro'],b3:['b3-filtro','b3-liq-filtro']};
+  (targets[ctx]||[]).forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=`<div class="filtro-bar">
+      <button class="fb on" onclick="setFiltro('${ctx}','hoy',this)">Hoy</button>
+      <button class="fb" onclick="setFiltro('${ctx}','semana',this)">Semana</button>
+      <button class="fb" onclick="setFiltro('${ctx}','mes',this)">Mes</button>
+      <button class="fb" onclick="setFiltro('${ctx}','año',this)">Año</button>
+      <button class="fb" onclick="setFiltro('${ctx}','rango',this)">Rango</button>
+    </div>
+    <div class="filtro-custom" id="fc-${ctx}-${id}">
+      <input type="date" id="fd-d-${ctx}-${id}">
+      <span style="color:var(--muted);font-size:10px">a</span>
+      <input type="date" id="fd-h-${ctx}-${id}">
+      <button class="btn bp" style="width:auto;padding:7px 12px;font-size:11px" onclick="aplicarRango('${ctx}','${id}')">OK</button>
+    </div>`;
+  });
+}
+
+function setFiltro(ctx,modo,btn){
+  FILTROS[ctx]={modo,desde:null,hasta:null};
+  document.querySelectorAll(`[onclick*="setFiltro('${ctx}'"]`).forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll(`[id^="fc-${ctx}-"]`).forEach(el=>el.classList.toggle('on',modo==='rango'));
+  if(modo!=='rango')refresh(ctx);
+}
+function aplicarRango(ctx,sfx){
+  const d=document.getElementById('fd-d-'+ctx+'-'+sfx)?.value;
+  const h=document.getElementById('fd-h-'+ctx+'-'+sfx)?.value;
+  if(d&&h){FILTROS[ctx]={modo:'rango',desde:d,hasta:h};refresh(ctx);}
+}
+function filtrarMovs(movs,ctx){
+  const f=FILTROS[ctx]||{modo:'hoy'};const hoy=fechaISO();const ahora=new Date();
+  return movs.filter(m=>{
+    const fecha=m.fecha||hoy;
+    if(f.modo==='hoy')return fecha===hoy;
+    if(f.modo==='semana'){const d=new Date(fecha+'T12:00:00');return(ahora-d)/(864e5)>=0&&(ahora-d)/(864e5)<7;}
+    if(f.modo==='mes')return fecha.slice(0,7)===hoy.slice(0,7);
+    if(f.modo==='año')return fecha.slice(0,4)===hoy.slice(0,4);
+    if(f.modo==='rango')return fecha>=f.desde&&fecha<=f.hasta;
+    return true;
+  });
+}
+function refresh(ctx){if(ctx==='owner'){renderOwner();renderGanancias();}else renderBarber(ctx);}
+
+// ── LÓGICA ────────────────────────────────────────────────────────────────────
+function cobrar(nom,monto,tipo){
+  const bid=document.getElementById('sv-bar').value;
+  const p=pct(bid);const com=Math.round(monto*p/100);const fecha=fechaISO();
+  S.ing+=monto;S.nsrv++;S.bars[tipo]+=monto;
+  if(!S.barberos[bid])S.barberos[bid]={total:0,com:0,n:0,svcs:[],vprod:0};
+  S.barberos[bid].total+=monto;S.barberos[bid].com+=com;S.barberos[bid].n++;
+  S.barberos[bid].svcs.push({nom,monto,com,h:hora(),fecha});
+  S.movs.unshift({h:hora(),t:'i',d:nom+' ('+getNombre(bid)+')',m:monto,fecha});
+  save();
+  enviarSheets({tipo:'movimiento',t:'ingreso',descripcion:nom,monto,servicio:tipo,barbero:getNombre(bid),fecha});
+  renderOwner();closeMo('mo-serv');
+}
+
+function cobrarBr(nom,monto,tipo,bid){
+  const p=pct(bid);const com=Math.round(monto*p/100);const fecha=fechaISO();
+  if(!S.barberos[bid])S.barberos[bid]={total:0,com:0,n:0,svcs:[],vprod:0};
+  S.barberos[bid].total+=monto;S.barberos[bid].com+=com;S.barberos[bid].n++;
+  S.barberos[bid].svcs.push({nom,monto,com,h:hora(),fecha});
+  S.ing+=monto;S.nsrv++;S.bars[tipo]+=monto;
+  S.movs.unshift({h:hora(),t:'i',d:nom,m:monto,fecha});
+  save();
+  enviarSheets({tipo:'movimiento',t:'ingreso',descripcion:nom,monto,servicio:tipo,barbero:getNombre(bid),fecha});
+  renderBarber(bid);closeMo('mo-serv-'+bid);
+}
+
+function registrarVenta(who){
+  const selId=who==='b1'?'vt-prod-b1':'vt-prod-sel';
+  const cantId=who==='b1'?'vt-cant-b1':'vt-cant';
+  const idx=parseInt(document.getElementById(selId).value);
+  const cant=parseInt(document.getElementById(cantId).value)||1;
+  const prod=S.productos[idx];if(!prod)return;
+  const total=prod.venta*cant;const fecha=fechaISO();
+  S.vprod+=total;S.nprod+=cant;
+  S.movs.unshift({h:hora(),t:'venta',d:prod.nom+' x'+cant,m:total,fecha});
+  if(who==='b1'){if(!S.barberos.b1)S.barberos.b1={total:0,com:0,n:0,svcs:[],vprod:0};S.barberos.b1.vprod=(S.barberos.b1.vprod||0)+total;}
+  save();
+  enviarSheets({tipo:'movimiento',t:'venta',descripcion:prod.nom,monto:total,cantidad:cant,costo:prod.costo*cant,fecha});
+  renderOwner();
+  if(who==='b1'){document.getElementById('b1-vprod').textContent=fmt(S.barberos.b1.vprod||0);}
+  closeMo(who==='b1'?'mo-venta-b1':'mo-venta');
+}
+
+function registrarGasto(){
+  const d=document.getElementById('g-desc').value.trim();
+  const m=parseFloat(document.getElementById('g-monto').value);
+  if(!d||isNaN(m)||m<=0)return;
+  S.gas+=m;S.ngst++;const fecha=fechaISO();
+  S.movs.unshift({h:hora(),t:'g',d,m,fecha});save();
+  enviarSheets({tipo:'movimiento',t:'gasto',descripcion:d,monto:m,fecha});
+  renderOwner();
+  document.getElementById('g-desc').value='';document.getElementById('g-monto').value='';closeMo('mo-gasto');
+}
+
+function registrarCostoOp(){
+  const tipo=document.getElementById('co-tipo').value;
+  const m=parseFloat(document.getElementById('co-monto').value);
+  if(isNaN(m)||m<=0)return;
+  S.costos[tipo]=m;save();renderCostos();closeMo('mo-costo-op');document.getElementById('co-monto').value='';
+}
+
+function agregarProducto(){
+  const nom=document.getElementById('p-nom').value.trim();
+  const cat=document.getElementById('p-cat').value;
+  const costo=parseInt(document.getElementById('p-costo').value)||0;
+  const venta=parseInt(document.getElementById('p-venta').value)||0;
+  const stock=parseInt(document.getElementById('p-stock').value)||0;
+  if(!nom||!venta)return;
+  S.productos.push({nom,cat,costo,venta,stock});save();
+  renderTiendaOwner();renderTiendaBarbero('b1');
+  ['p-nom','p-costo','p-venta','p-stock'].forEach(id=>document.getElementById(id).value='');
+  closeMo('mo-prod');
+}
+
+// ── NOMBRES ───────────────────────────────────────────────────────────────────
+function getNombre(bid){return Object.values(USERS).find(u=>u.role===bid)?.nombre||bid}
+function getSocioNombre(sid){return Object.values(USERS).find(u=>u.socioId===sid)?.nombre||sid}
+
+// ── TIENDA ────────────────────────────────────────────────────────────────────
+function renderTiendaOwner(){
+  const lista=document.getElementById('prod-lista-ow');
+  const sel=document.getElementById('vt-prod-sel');
+  if(!lista)return;lista.innerHTML='';sel.innerHTML='';
+  S.productos.forEach((p,i)=>{
+    const mg=p.costo>0?Math.round((p.venta-p.costo)/p.costo*100):0;
+    lista.innerHTML+=`<div class="prod-card"><div class="prod-top"><div><div class="prod-name">${p.nom}</div><div class="prod-cat">${p.cat}</div></div><span class="prod-margen">+${mg}%</span></div><div class="prod-precios"><span class="prod-costo">Costo: ${fmt(p.costo)}</span><span class="prod-venta">${fmt(p.venta)}</span></div></div>`;
+    const opt=document.createElement('option');opt.value=i;opt.textContent=`${p.nom} — ${fmt(p.venta)}`;sel.appendChild(opt);
+  });
+  document.getElementById('n-prods').textContent=S.productos.length;
+  document.getElementById('n-vprod-hoy').textContent=fmt(S.vprod);
+}
+
+function renderTiendaBarbero(bid){
+  const lista=document.getElementById('prod-lista-'+bid);
+  const sel=document.getElementById('vt-prod-'+bid);
+  if(!lista)return;lista.innerHTML='';if(sel)sel.innerHTML='';
+  S.productos.forEach((p,i)=>{
+    const mg=p.costo>0?Math.round((p.venta-p.costo)/p.costo*100):0;
+    lista.innerHTML+=`<div class="prod-card"><div class="prod-top"><div><div class="prod-name">${p.nom}</div><div class="prod-cat">${p.cat}</div></div><span class="prod-margen">+${mg}%</span></div><div class="prod-precios"><span class="prod-costo">Costo: ${fmt(p.costo)}</span><span class="prod-venta">${fmt(p.venta)}</span></div><button class="btn bp" style="margin-top:7px;font-size:11px;padding:8px" onclick="selProductoBarbero(${i})">Vender este</button></div>`;
+    if(sel){const opt=document.createElement('option');opt.value=i;opt.textContent=`${p.nom} — ${fmt(p.venta)}`;sel.appendChild(opt);}
+  });
+}
+
+function selProductoBarbero(idx){
+  document.getElementById('vt-prod-b1').value=idx;
+  document.getElementById('vt-cant-b1').value=1;
+  openMo('mo-venta-b1');
+}
+
+// ── RENDER OWNER ──────────────────────────────────────────────────────────────
+function renderOwner(){
+  const ctx='owner';
+  const mf=filtrarMovs(S.movs,ctx);
+  const ingF=mf.filter(m=>m.t==='i').reduce((a,m)=>a+m.m,0);
+  const vpF=mf.filter(m=>m.t==='venta').reduce((a,m)=>a+m.m,0);
+  const gasF=mf.filter(m=>m.t==='g').reduce((a,m)=>a+m.m,0);
+  const opDia=totalCostosOp()/26;
+  const comF=totalComisiones();
+  const util=ingF+vpF-gasF-opDia-comF;
+  document.getElementById('ow-ing').textContent=fmt(ingF);
+  document.getElementById('ow-vprod').textContent=fmt(vpF);
+  document.getElementById('ow-np').textContent=mf.filter(m=>m.t==='venta').length+' ventas';
+  document.getElementById('ow-gas').textContent=fmt(gasF);
+  document.getElementById('ow-ns').textContent=mf.filter(m=>m.t==='i').length+' servicios';
+  document.getElementById('ow-op').textContent=fmt(opDia);
+  const uel=document.getElementById('ow-util');uel.textContent=fmt(util);uel.style.color=util>=0?'var(--gold)':'var(--danger)';
+  const mx=Math.max(1,...Object.values(S.bars));
+  Object.keys(S.bars).forEach(k=>{document.getElementById('bf-'+k).style.width=(S.bars[k]/mx*100)+'%';document.getElementById('bl-'+k).textContent=fmt(S.bars[k]);});
+  const COLORS={i:'var(--success)',g:'var(--danger)',venta:'var(--purple)'};
+  const ml=document.getElementById('ow-movs');
+  if(!mf.length){ml.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin movimientos en este período</div>';return}
+  ml.innerHTML=mf.slice(0,15).map(m=>`<div class="tli"><div class="tld" style="background:${COLORS[m.t]||'var(--blue)'}"></div><div class="tlt">${m.h}</div><div class="tln">${m.d}<span class="tla" style="color:${COLORS[m.t]||'var(--blue)'}">${m.t==='g'?'-':'+'}${fmt(m.m)}</span></div></div>`).join('');
+}
+
+function totalCostosOp(){return Object.values(S.costos).reduce((a,b)=>a+b,0)}
+function totalComisiones(){return Object.values(S.barberos).reduce((a,b)=>a+(b.com||0),0)}
+
+function renderCostos(){
+  ['alquiler','servicios','internet','insumos','otros'].forEach(k=>{const el=document.getElementById('op-'+k);if(el)el.textContent=fmt(S.costos[k]||0);});
+  const t=totalCostosOp();
+  document.getElementById('op-total').textContent=fmt(t);
+  document.getElementById('op-dia').textContent=fmt(t/26);
+}
+
+function renderGanancias(){
+  const ti=S.ing+S.vprod;const tc=totalComisiones();const opd=totalCostosOp()/26;const neta=ti-tc-opd-S.gas;
+  document.getElementById('gn-total-ing').textContent=fmt(ti);
+  document.getElementById('gn-total-com').textContent=fmt(tc);
+  document.getElementById('gn-op-dia').textContent=fmt(opd);
+  document.getElementById('gn-gastos').textContent=fmt(S.gas);
+  const gn=document.getElementById('gn-neta');gn.textContent=fmt(neta);gn.style.color=neta>=0?'var(--gold)':'var(--danger)';
+  const sp=Math.max(neta,0);
+  document.getElementById('gn-socio1').textContent=fmt(sp/2);
+  document.getElementById('gn-socio2').textContent=fmt(sp/2);
+  document.getElementById('gn-s1-label').textContent=getSocioNombre('s1')+' (50%)';
+  document.getElementById('gn-s2-label').textContent=getSocioNombre('s2')+' (50%)';
+  ['b1','b2','b3'].forEach(b=>{
+    document.getElementById('gn-'+b).textContent=fmt(S.barberos[b]?.com||0);
+  });
+  document.getElementById('gn-b1-label').textContent=getNombre('b1')+' (60%)';
+  document.getElementById('gn-b2-label').textContent=getNombre('b2')+' (50%)';
+  document.getElementById('gn-b3-label').textContent=getNombre('b3')+' (50%)';
+  document.getElementById('gn-b-total').textContent=fmt(tc);
+}
+
+// ── RENDER BARBERO ────────────────────────────────────────────────────────────
+function renderBarber(bid){
+  const b=S.barberos[bid]||{total:0,com:0,n:0,svcs:[],vprod:0};
+  const p=pct(bid);
+  const ctx=bid;
+  const mf=filtrarMovs(b.svcs.map(s=>({...s,t:'i',d:s.nom,m:s.monto})),ctx);
+  const tf=mf.reduce((a,m)=>a+m.m,0);
+  const cf=Math.round(tf*p/100);
+  const nf=mf.length;
+  document.getElementById(bid+'-hechos').textContent=b.n;
+  document.getElementById(bid+'-com-est').textContent=fmt(b.com);
+  document.getElementById(bid+'-total').textContent=fmt(tf);
+  document.getElementById(bid+'-com').textContent=fmt(cf);
+  document.getElementById(bid+'l-n').textContent=nf;
+  document.getElementById(bid+'l-ing').textContent=fmt(tf);
+  document.getElementById(bid+'l-total').textContent=fmt(cf);
+  const ml=document.getElementById(bid+'-movs');
+  if(!mf.length){ml.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin registros en este período</div>';}
+  else{ml.innerHTML=mf.slice(0,10).map(m=>`<div class="tli"><div class="tld" style="background:var(--success)"></div><div class="tlt">${m.h}</div><div class="tln">${m.d||m.nom}<span class="tla" style="color:var(--success)">+${fmt(m.m)}</span></div></div>`).join('');}
+  const det=document.getElementById(bid+'l-detalle');
+  if(!b.svcs.length){det.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin servicios cobrados</div>';}
+  else{det.innerHTML=b.svcs.slice(-10).reverse().map(s=>`<div class="card" style="padding:8px 10px;margin-bottom:5px"><div class="row"><span style="font-size:11px">${s.nom}</span><span style="font-size:11px;color:#5BB3FF;font-weight:bold">${fmt(s.monto)}</span></div><div class="row"><span style="font-size:9px;color:var(--muted)">${s.h} · Comisión ${p}%</span><span style="font-size:12px;color:var(--gold);font-weight:bold">+${fmt(s.com)}</span></div></div>`).join('');}
+  if(bid==='b1'){const vp=document.getElementById('b1-vprod');if(vp)vp.textContent=fmt(b.vprod||0);}
+}
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+function renderConfig(){
+  const cs=document.getElementById('cfg-socios');cs.innerHTML='';
+  Object.entries(USERS).filter(([,v])=>v.role==='owner').forEach(([key,u])=>{
+    cs.innerHTML+=`<div class="cfg-row"><div class="cfg-icon">👤</div><div class="cfg-info"><div class="cfg-label">${u.nombre}</div><div class="cfg-sub">@${key}</div></div><button class="cfg-edit" onclick="editUser('${key}')">Editar</button></div>`;
+  });
+  const cb=document.getElementById('cfg-barberos');cb.innerHTML='';
+  Object.entries(USERS).filter(([,v])=>v.role!=='owner').forEach(([key,u])=>{
+    cb.innerHTML+=`<div class="cfg-row"><div class="cfg-icon">✂</div><div class="cfg-info"><div class="cfg-label">${u.nombre} <span class="badge bc">${u.pct}%</span></div><div class="cfg-sub">@${key}</div></div><button class="cfg-edit" onclick="editUser('${key}')">Editar</button></div>`;
+  });
+  actualizarSheetsStatus();
+  // Link público
+  const pl=document.getElementById('public-link');
+  if(pl)pl.textContent=window.location.href.split('?')[0];
+  // Select barberos modal cobrar
+  const sb=document.getElementById('sv-bar');
+  if(sb){sb.innerHTML=Object.entries(USERS).filter(([,v])=>v.role!=='owner').map(([k,u])=>`<option value="${u.role}">${u.nombre} (${u.pct}%)</option>`).join('');}
+  // Hint login
+  const hint=document.getElementById('hint-block');
+  if(hint)hint.innerHTML='<b style="color:#333">Accesos:</b><br>'+Object.entries(USERS).map(([k])=>`${k} / ****`).join(' · ');
+}
+
+function editUser(key){
+  const u=USERS[key];
+  document.getElementById('eu-id').value=key;
+  document.getElementById('eu-title').textContent='Editar · '+u.nombre;
+  document.getElementById('eu-nombre').value=u.nombre;
+  document.getElementById('eu-user').value=key;
+  document.getElementById('eu-pass').value=u.pass;
+  openMo('mo-edit-user');
+}
+
+function guardarUser(){
+  const oldKey=document.getElementById('eu-id').value;
+  const nom=document.getElementById('eu-nombre').value.trim();
+  const newKey=document.getElementById('eu-user').value.trim().toLowerCase();
+  const pass=document.getElementById('eu-pass').value;
+  if(!nom||!newKey||!pass||pass.length<4)return;
+  const data={...USERS[oldKey],nombre:nom,pass};
+  if(newKey!==oldKey){delete USERS[oldKey];}
+  USERS[newKey]=data;
+  if(currentUser?.key===oldKey){currentUser={...currentUser,...data,key:newKey};document.getElementById('hdr-role').textContent=nom;}
+  save();renderConfig();closeMo('mo-edit-user');
+}
+
+function copiarLink(){
+  const link=window.location.href.split('?')[0];
+  navigator.clipboard?.writeText(link).then(()=>alert('Link copiado!')).catch(()=>alert(link));
+}
+
+// ── BOOKING ───────────────────────────────────────────────────────────────────
+let bkSrv={name:'',price:0};let bkSlot='';
+function selSrv(el,n,p){document.querySelectorAll('.bsrv').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');bkSrv={name:n,price:p};document.getElementById('bk-e1').textContent='';}
+function selSlot(el,t){document.querySelectorAll('.sl:not(.off)').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');bkSlot=t;document.getElementById('bk-e2').textContent='';}
+function bkN1(){if(!bkSrv.name){document.getElementById('bk-e1').textContent='Seleccioná un servicio';return}document.getElementById('bk-sl').textContent=bkSrv.name+' · '+fmt(bkSrv.price);document.getElementById('bk-s1').style.display='none';document.getElementById('bk-s2').style.display='block';}
+function bkBack(){document.getElementById('bk-s2').style.display='none';document.getElementById('bk-s1').style.display='block';}
+function bkN2(){const nom=document.getElementById('bk-nom').value.trim();if(!bkSlot){document.getElementById('bk-e2').textContent='Elegí un horario';return}if(!nom){document.getElementById('bk-e2').textContent='Ingresá tu nombre';return}document.getElementById('cf-srv').textContent=bkSrv.name;document.getElementById('cf-hora').textContent=bkSlot;document.getElementById('cf-nom').textContent=nom;document.getElementById('cf-precio').textContent=fmt(bkSrv.price);document.getElementById('bk-s2').style.display='none';document.getElementById('bk-s3').style.display='block';}
+function bkBack2(){document.getElementById('bk-s3').style.display='none';document.getElementById('bk-s2').style.display='block';}
+function bkFin(){
+  const nom=document.getElementById('bk-nom').value.trim();
+  const cel=document.getElementById('bk-cel').value.trim();
+  document.getElementById('bk-ok-msg').innerHTML=`<b style="color:var(--cream)">${nom}</b>, tu cita de <b style="color:var(--cream)">${bkSrv.name}</b> quedó agendada a las <b style="color:var(--cream)">${bkSlot}</b>.<br><br>Te contactamos por WhatsApp para confirmar.`;
+  document.getElementById('bk-s3').style.display='none';
+  document.getElementById('bk-ok').style.display='flex';
+  S.ncitas++;save();
+  enviarSheets({tipo:'cita',cliente:nom,whatsapp:cel,servicio:bkSrv.name,precio:bkSrv.price,hora:bkSlot,fecha:fechaISO()});
+}
+function bkReset(){bkSrv={name:'',price:0};bkSlot='';document.querySelectorAll('.bsrv').forEach(e=>e.classList.remove('sel'));document.querySelectorAll('.sl').forEach(e=>e.classList.remove('sel'));['bk-nom','bk-cel'].forEach(id=>document.getElementById(id).value='');document.getElementById('bk-ok').style.display='none';document.getElementById('bk-s1').style.display='block';}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+load();
+renderTiendaOwner();
+renderTiendaBarbero('b1');
+// Hint inicial (sin mostrar contraseñas)
+document.getElementById('hint-block').innerHTML='<b style="color:#333">Demo:</b><br>dueno·socio2·barbero1·barbero2·barbero3<br>Clave: <b style="color:#5BB3FF">1234</b>';
+// Init sv-bar
+const sbInit=document.getElementById('sv-bar');
+if(sbInit)sbInit.innerHTML=Object.entries(USERS).filter(([,v])=>v.role!=='owner').map(([k,u])=>`<option value="${u.role}">${u.nombre} (${u.pct}%)</option>`).join('');
+</script>
+</body>
+</html>
