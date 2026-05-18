@@ -1050,10 +1050,113 @@ load();
 renderTiendaOwner();
 renderTiendaBarbero('b1');
 // Hint inicial (sin mostrar contraseñas)
-document.getElementById('hint-block').innerHTML='<b style="color:#333">Demo:</b><br>dueno·socio2·barbero1·barbero2·barbero3<br>Clave: <b style="color:#5BB3FF">1234</b>';
+document.getElementById('hint-block').innerHTML='<b style="color:#333">:</b><br>dueno·socio2·barbero1·barbero2·barbero3<br>Clave: <b style="color:#5BB3FF">1234</b>';
 // Init sv-bar
 const sbInit=document.getElementById('sv-bar');
 if(sbInit)sbInit.innerHTML=Object.entries(USERS).filter(([,v])=>v.role!=='owner').map(([k,u])=>`<option value="${u.role}">${u.nombre} (${u.pct}%)</option>`).join('');
 </script>
+
+<script>
+/* ===== NUEVA CAPA GOOGLE SHEETS ===== */
+
+const API_URL = "https://script.google.com/macros/s/AKfycbyVXijFTgUwIKKA9wxCoQ-McPeu3oSw2tzIKNmaliLDkmhY0RCHKbSqKA5Tj_TRjO3D6A/exec";
+
+let USERS = [];
+let SERVICIOS = [];
+let PRODUCTOS = [];
+let CONFIG = [];
+
+async function cargarInicial() {
+  try {
+    const r = await fetch(API_URL + '?action=init');
+    const data = await r.json();
+
+    if(!data.ok) {
+      mostrarMensajeConexion();
+      return;
+    }
+
+    USERS = data.usuarios || [];
+    SERVICIOS = data.servicios || [];
+    PRODUCTOS = data.productos || [];
+    CONFIG = data.config || [];
+
+    window.USERS = USERS;
+    window.SERVICIOS = SERVICIOS;
+    window.PRODUCTOS = PRODUCTOS;
+
+    console.log('Datos cargados desde Sheets');
+
+    if(typeof renderProductos === 'function') {
+      renderProductos();
+    }
+
+    if(typeof renderServicios === 'function') {
+      renderServicios();
+    }
+
+  } catch(err) {
+    console.error(err);
+    mostrarMensajeConexion();
+  }
+}
+
+function mostrarMensajeConexion(){
+  const loginBox = document.querySelector('.login-box') || document.body;
+  const aviso = document.createElement('div');
+  aviso.innerHTML = `
+    <div style="
+      background:#111;
+      color:#fff;
+      padding:14px;
+      border-radius:12px;
+      margin:12px;
+      font-family:sans-serif;
+    ">
+      No se pudo conectar con Google Sheets.
+    </div>
+  `;
+  loginBox.prepend(aviso);
+}
+
+async function loginSheets(usuario,password){
+  const r = await fetch(API_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      action:'login',
+      usuario,
+      password
+    })
+  });
+
+  return await r.json();
+}
+
+async function guardarProducto(producto){
+  return fetch(API_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      action:'saveProducto',
+      producto
+    })
+  });
+}
+
+async function guardarServicio(servicio){
+  return fetch(API_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      action:'saveServicio',
+      servicio
+    })
+  });
+}
+
+window.addEventListener('load', cargarInicial);
+</script>
+
 </body>
 </html>
