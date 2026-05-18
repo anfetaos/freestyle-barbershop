@@ -517,7 +517,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 
 <script>
 // ── CONFIGURACIÓN Y ESTADO ───────────────────────────────────────────────────
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec';
+const https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953 = 'https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec';
 
 let USERS = {}; // Ya no hay usuarios hardcodeados
 let currentUser = null;
@@ -566,7 +566,7 @@ async function cargarDatosSheets() {
     bo.disabled = true;
 
     // Llama al Google Apps Script (Debe tener un doGet preparado para retornar {USERS, S})
-    const res = await fetch(SHEETS_URL);
+    const res = await fetch(https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953);
     const data = await res.json();
 
     if (data.S) S = {...S, ...data.S};
@@ -597,10 +597,10 @@ async function cargarDatosSheets() {
 window.onload = cargarDatosSheets;
 
 async function enviarSheets(data){
-  if(!SHEETS_URL)return;
+  if(!https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953)return;
   try{
     // Las llamadas se hacen vía POST sin CORS (no-cors support is ideal)
-    await fetch(SHEETS_URL,{
+    await fetch(https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953,{
       method:'POST',
       body:JSON.stringify(data)
     });
