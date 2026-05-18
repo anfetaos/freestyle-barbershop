@@ -517,7 +517,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 
 <script>
 // ── CONFIGURACIÓN Y ESTADO ───────────────────────────────────────────────────
-const https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953 = 'https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec';
+const https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec = 'https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec';
 
 let USERS = {}; // Ya no hay usuarios hardcodeados
 let currentUser = null;
@@ -566,7 +566,7 @@ async function cargarDatosSheets() {
     bo.disabled = true;
 
     // Llama al Google Apps Script (Debe tener un doGet preparado para retornar {USERS, S})
-    const res = await fetch(https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953);
+    const res = await fetch(https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec);
     const data = await res.json();
 
     if (data.S) S = {...S, ...data.S};
@@ -597,10 +597,10 @@ async function cargarDatosSheets() {
 window.onload = cargarDatosSheets;
 
 async function enviarSheets(data){
-  if(!https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953)return;
+  if(!https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec)return;
   try{
     // Las llamadas se hacen vía POST sin CORS (no-cors support is ideal)
-    await fetch(https://docs.google.com/spreadsheets/d/1oFtB5U0sGwF5z8SpMMT4eni0wSLUwZoHIJCZ-EqrjOc/edit?gid=1107633953#gid=1107633953,{
+    await fetch(https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec,{
       method:'POST',
       body:JSON.stringify(data)
     });
