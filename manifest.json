@@ -1,20 +1,21 @@
 {
   "name": "Freestyle Barbershop",
   "short_name": "Freestyle",
-  "description": "Control total de tu barbería",
-  "start_url": "/freestyle-barbershop/",
+  "description": "Control total de barbería",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0E0E0E",
   "theme_color": "#111111",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://via.placeholder.com/192x192/0d1f3c/1E90FF?text=✂",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://via.placeholder.com/512x512/0d1f3c/1E90FF?text=✂",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
