@@ -39,11 +39,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 .fi{width:100%;background:var(--d3);border:1px solid #252525;border-radius:8px;color:var(--cream);padding:10px 11px;font-size:16px;outline:none;-webkit-appearance:none}
 .fi:focus{border-color:var(--blue)}
 .err{font-size:9px;color:var(--danger);text-align:center;min-height:13px}
-.btn{width:100%;padding:11px;border-radius:8px;font-size:14px;cursor:pointer;border:none;font-weight:bold;transition: opacity 0.2s}
-.btn:disabled{opacity: 0.5; cursor: not-allowed}
+.btn{width:100%;padding:11px;border-radius:8px;font-size:14px;cursor:pointer;border:none;font-weight:bold}
 .bp{background:var(--blue);color:#fff}.bp:active{background:#3a9fff}
 .bo{background:transparent;color:#5BB3FF;border:1px solid #252525;margin-top:2px;font-weight:normal}.bo:active{background:rgba(30,144,255,.07)}
 .bs{padding:6px 10px;font-size:10px;border-radius:6px;cursor:pointer;border:1px solid #252525;background:transparent;color:var(--muted)}.bs:active{color:var(--cyan)}
+.hint{font-size:9px;color:var(--muted);text-align:center;line-height:1.9}
 
 /* UTILS */
 .sec{font-size:8px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;margin-top:12px}
@@ -59,6 +59,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 .card{background:var(--d2);border:1px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:6px}
 .row{display:flex;align-items:center;justify-content:space-between;padding:5px 0}
 .row+.row{border-top:1px solid #1a1a1a}
+.badge{display:inline-block;border-radius:20px;padding:2px 7px;font-size:9px;font-weight:bold}
+.bg{color:var(--success);background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.2)}
+.bb{color:#5BB3FF;background:rgba(30,144,255,.1);border:1px solid rgba(30,144,255,.2)}
+.by{color:var(--gold);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.2)}
+.br{color:var(--danger);background:rgba(216,90,48,.1);border:1px solid rgba(216,90,48,.2)}
+.bc{color:var(--cyan);background:rgba(0,200,224,.1);border:1px solid rgba(0,200,224,.2)}
 
 /* BARS */
 .bw{margin-bottom:6px}
@@ -79,6 +85,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 .aslot{background:var(--d2);border:1px solid #222;border-radius:9px;padding:9px 11px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
 .atime{background:var(--d3);border-radius:7px;padding:4px 7px;text-align:center;min-width:42px;flex-shrink:0}
 .ahour{font-size:13px;color:var(--cyan);font-weight:bold}
+.aampm{font-size:8px;color:var(--muted)}
 
 /* SERVICIOS */
 .sbtn{display:flex;align-items:center;justify-content:space-between;background:var(--d2);border:1px solid #222;border-radius:9px;padding:10px 12px;margin-bottom:5px;cursor:pointer;width:100%;color:var(--cream)}
@@ -156,6 +163,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 .sl.off{color:#2a2a2a;border-color:#181818;cursor:not-allowed}
 .cfb{background:rgba(0,200,224,.05);border:1px solid rgba(0,200,224,.15);border-radius:9px;padding:12px;margin-bottom:10px}
 .cfr{display:flex;justify-content:space-between;font-size:11px;padding:3px 0}
+
+/* SHEETS CONFIG */
+.sheets-box{background:rgba(30,144,255,.05);border:1px solid rgba(30,144,255,.2);border-radius:9px;padding:12px;margin-bottom:10px}
+.sheets-status{display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot.connected{background:var(--success)}
+.dot.disconnected{background:var(--muted)}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
 </head>
@@ -170,6 +184,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
   </div>
 </div>
 
+<!-- LOGIN -->
 <div class="screen on" id="sc-login">
   <div class="lw">
     <div style="font-size:40px">✂</div>
@@ -180,12 +195,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
       <input class="fi" type="text" id="li-u" placeholder="Usuario" autocomplete="username" autocorrect="off" autocapitalize="none">
       <input class="fi" type="password" id="li-p" placeholder="Contraseña" autocomplete="current-password">
       <div class="err" id="li-err"></div>
-      <button class="btn bp" id="btn-ingresar" onclick="doLogin()">Ingresar</button>
-      <button class="btn bo" id="btn-cliente" onclick="goClient()">Soy cliente — agendar cita</button>
+      <button class="btn bp" onclick="doLogin()">Ingresar</button>
+      <button class="btn bo" onclick="goClient()">Soy cliente — agendar cita</button>
     </div>
+    <div class="hint" id="hint-block"></div>
   </div>
 </div>
 
+<!-- DUEÑO -->
 <div class="screen" id="sc-owner">
   <div class="tab on" id="ow-caja">
     <div id="ow-filtro"></div>
@@ -265,6 +282,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
     <button class="btn bo" style="margin-top:5px" onclick="openMo('mo-gasto')">+ Gasto puntual</button>
   </div>
   <div class="tab" id="ow-config">
+    <div class="sec">Google Sheets</div>
+    <div class="sheets-box">
+      <div class="sheets-status"><div class="dot disconnected" id="sheets-dot"></div><span id="sheets-status-txt" style="color:var(--muted)">No conectado</span></div>
+      <label>URL del Apps Script</label>
+      <input class="fi" type="url" id="sheets-url" placeholder="https://script.google.com/macros/s/.../exec" style="margin-bottom:8px;font-size:12px">
+      <button class="btn bp" onclick="guardarSheetsUrl()">Guardar y conectar</button>
+    </div>
     <div class="sec">Socios</div>
     <div id="cfg-socios"></div>
     <div class="sec">Equipo</div>
@@ -285,6 +309,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
   </nav>
 </div>
 
+<!-- BARBERO PRINCIPAL b1 -->
 <div class="screen" id="sc-b1">
   <div class="tab on" id="b1-agenda">
     <div class="sec" id="b1-titulo">Mi agenda</div>
@@ -329,6 +354,81 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
   </nav>
 </div>
 
+<!-- BARBERO 2 -->
+<div class="screen" id="sc-b2">
+  <div class="tab on" id="b2-agenda">
+    <div class="sec" id="b2-titulo">Mi agenda</div>
+    <div id="b2-citas"><div class="aslot" style="border:1px dashed #252525;background:transparent"><div class="atime"><div class="ahour">—</div></div><div style="flex:1"><div style="font-size:11px;color:var(--muted)">Sin citas hoy</div></div></div></div>
+    <button class="btn bp" style="margin-top:8px" onclick="openMo('mo-serv-b2')">✂ Cobrar servicio</button>
+    <div class="divx"></div>
+    <div class="g2">
+      <div class="kc"><div class="kl">Completados</div><div class="kv g" id="b2-hechos">0</div></div>
+      <div class="kc"><div class="kl">Mi comisión est.</div><div class="kv y" id="b2-com-est">$0</div></div>
+    </div>
+  </div>
+  <div class="tab" id="b2-caja">
+    <div id="b2-filtro"></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Total cobrado</div><div class="bn g" id="b2-total">$0</div></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Mi comisión (50%)</div><div class="bn y" id="b2-com">$0</div></div>
+    <div class="tl" id="b2-movs"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin registros</div></div>
+  </div>
+  <div class="tab" id="b2-liquidacion">
+    <div id="b2-liq-filtro"></div>
+    <div class="gcard gcard-barber">
+      <div class="gcard-row"><span class="gcard-lbl">Cortes realizados</span><span class="gcard-val c" id="b2l-n">0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Total generado</span><span class="gcard-val g" id="b2l-ing">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Mi porcentaje</span><span class="gcard-val c">50%</span></div>
+      <div style="border-top:1px solid rgba(0,200,224,.15);margin-top:4px;padding-top:4px">
+        <div class="gcard-row"><span class="gcard-lbl" style="color:var(--cream);font-weight:bold">Mi comisión</span><span class="gcard-val y" id="b2l-total" style="font-size:16px">$0</span></div>
+      </div>
+    </div>
+    <div id="b2l-detalle"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin servicios</div></div>
+  </div>
+  <nav class="nav t3">
+    <button class="nb on" onclick="brXTab('b2','agenda',this)"><i class="ti ti-calendar"></i>Agenda</button>
+    <button class="nb" onclick="brXTab('b2','caja',this)"><i class="ti ti-cash"></i>Mi Caja</button>
+    <button class="nb" onclick="brXTab('b2','liquidacion',this)"><i class="ti ti-coin"></i>Liquidación</button>
+  </nav>
+</div>
+
+<!-- BARBERO 3 -->
+<div class="screen" id="sc-b3">
+  <div class="tab on" id="b3-agenda">
+    <div class="sec" id="b3-titulo">Mi agenda</div>
+    <div id="b3-citas"><div class="aslot" style="border:1px dashed #252525;background:transparent"><div class="atime"><div class="ahour">—</div></div><div style="flex:1"><div style="font-size:11px;color:var(--muted)">Sin citas hoy</div></div></div></div>
+    <button class="btn bp" style="margin-top:8px" onclick="openMo('mo-serv-b3')">✂ Cobrar servicio</button>
+    <div class="divx"></div>
+    <div class="g2">
+      <div class="kc"><div class="kl">Completados</div><div class="kv g" id="b3-hechos">0</div></div>
+      <div class="kc"><div class="kl">Mi comisión est.</div><div class="kv y" id="b3-com-est">$0</div></div>
+    </div>
+  </div>
+  <div class="tab" id="b3-caja">
+    <div id="b3-filtro"></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Total cobrado</div><div class="bn g" id="b3-total">$0</div></div>
+    <div class="kc" style="margin-bottom:6px"><div class="kl" style="text-align:center">Mi comisión (50%)</div><div class="bn y" id="b3-com">$0</div></div>
+    <div class="tl" id="b3-movs"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin registros</div></div>
+  </div>
+  <div class="tab" id="b3-liquidacion">
+    <div id="b3-liq-filtro"></div>
+    <div class="gcard gcard-barber">
+      <div class="gcard-row"><span class="gcard-lbl">Cortes realizados</span><span class="gcard-val c" id="b3l-n">0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Total generado</span><span class="gcard-val g" id="b3l-ing">$0</span></div>
+      <div class="gcard-row"><span class="gcard-lbl">Mi porcentaje</span><span class="gcard-val c">50%</span></div>
+      <div style="border-top:1px solid rgba(0,200,224,.15);margin-top:4px;padding-top:4px">
+        <div class="gcard-row"><span class="gcard-lbl" style="color:var(--cream);font-weight:bold">Mi comisión</span><span class="gcard-val y" id="b3l-total" style="font-size:16px">$0</span></div>
+      </div>
+    </div>
+    <div id="b3l-detalle"><div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin servicios</div></div>
+  </div>
+  <nav class="nav t3">
+    <button class="nb on" onclick="brXTab('b3','agenda',this)"><i class="ti ti-calendar"></i>Agenda</button>
+    <button class="nb" onclick="brXTab('b3','caja',this)"><i class="ti ti-cash"></i>Mi Caja</button>
+    <button class="nb" onclick="brXTab('b3','liquidacion',this)"><i class="ti ti-coin"></i>Liquidación</button>
+  </nav>
+</div>
+
+<!-- CLIENTE -->
 <div class="screen" id="sc-client">
   <div class="bkw" id="bk-s1">
     <div class="bkt">Freestyle Barbershop</div>
@@ -388,6 +488,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
   </div>
 </div>
 
+<!-- MODALES -->
 <div class="mo" id="mo-serv"><div class="mbox">
   <button class="mc" onclick="closeMo('mo-serv')">✕</button>
   <div class="mt">✂ Cobrar servicio</div>
@@ -416,6 +517,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
   <button class="sbtn" onclick="cobrarBr('Combo Dúo',26000,'co','b1')"><div><div style="font-size:11px">Combo Dúo</div><div style="font-size:9px;color:var(--cyan)">Corte+Barba</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$26,000</span></button>
   <button class="sbtn" onclick="cobrarBr('Combo Full Freestyle',30000,'co','b1')"><div><div style="font-size:11px">Combo Full</div><div style="font-size:9px;color:var(--cyan)">Corte+Barba+Cejas</div></div><span style="font-size:12px;font-weight:bold;color:var(--gold)">$30,000</span></button>
   <button class="btn bo" style="margin-top:6px" onclick="closeMo('mo-serv-b1')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-serv-b2"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-serv-b2')">✕</button>
+  <div class="mt">✂ Cobrar servicio</div>
+  <button class="sbtn" onclick="cobrarBr('Corte Básico',18000,'cb','b2')"><span style="font-size:11px">Corte Básico</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$18,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Corte con Shaver',20000,'cs','b2')"><span style="font-size:11px">Corte con Shaver</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$20,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Barba Freestyle',10000,'bf','b2')"><span style="font-size:11px">Barba Freestyle</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$10,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Perfilado de Cejas',4000,'pf','b2')"><span style="font-size:11px">Perfilado de Cejas</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$4,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Pro',22000,'co','b2')"><span style="font-size:11px">Combo Pro</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$22,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Dúo',26000,'co','b2')"><span style="font-size:11px">Combo Dúo</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$26,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Full Freestyle',30000,'co','b2')"><span style="font-size:11px">Combo Full</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$30,000</span></button>
+  <button class="btn bo" style="margin-top:6px" onclick="closeMo('mo-serv-b2')">Cancelar</button>
+</div></div>
+
+<div class="mo" id="mo-serv-b3"><div class="mbox">
+  <button class="mc" onclick="closeMo('mo-serv-b3')">✕</button>
+  <div class="mt">✂ Cobrar servicio</div>
+  <button class="sbtn" onclick="cobrarBr('Corte Básico',18000,'cb','b3')"><span style="font-size:11px">Corte Básico</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$18,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Corte con Shaver',20000,'cs','b3')"><span style="font-size:11px">Corte con Shaver</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$20,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Barba Freestyle',10000,'bf','b3')"><span style="font-size:11px">Barba Freestyle</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$10,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Perfilado de Cejas',4000,'pf','b3')"><span style="font-size:11px">Perfilado de Cejas</span><span style="font-size:12px;font-weight:bold;color:#5BB3FF">$4,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Pro',22000,'co','b3')"><span style="font-size:11px">Combo Pro</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$22,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Dúo',26000,'co','b3')"><span style="font-size:11px">Combo Dúo</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$26,000</span></button>
+  <button class="sbtn" onclick="cobrarBr('Combo Full Freestyle',30000,'co','b3')"><span style="font-size:11px">Combo Full</span><span style="font-size:12px;font-weight:bold;color:var(--gold)">$30,000</span></button>
+  <button class="btn bo" style="margin-top:6px" onclick="closeMo('mo-serv-b3')">Cancelar</button>
 </div></div>
 
 <div class="mo" id="mo-venta"><div class="mbox">
@@ -481,28 +608,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
   <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-prod')">Cancelar</button>
 </div></div>
 
-<div class="mo" id="mo-edit-prod"><div class="mbox">
-  <button class="mc" onclick="closeMo('mo-edit-prod')">✕</button>
-  <div class="mt">Editar producto</div>
-  <input type="hidden" id="ep-idx">
-  <label>Nombre</label><input class="fi" type="text" id="ep-nom">
-  <label>Categoría</label>
-  <select id="ep-cat">
-    <option>💎 Piercings</option>
-    <option>🔥 Pipas</option>
-    <option>🌿 Accesorios</option>
-    <option>✂ Barbería</option>
-  </select>
-  <div class="g2f">
-    <div><label>Costo (COP)</label><input class="fi" type="number" id="ep-costo"></div>
-    <div><label>Precio venta</label><input class="fi" type="number" id="ep-venta"></div>
-  </div>
-  <label>Stock</label><input class="fi" type="number" id="ep-stock">
-  <button class="btn bp" onclick="guardarEditProd()">Guardar Cambios</button>
-  <button class="btn bo" style="margin-top:4px;color:var(--danger);border-color:rgba(216,90,48,.25)" onclick="eliminarProd()">Eliminar Producto</button>
-  <button class="btn bo" style="margin-top:4px" onclick="closeMo('mo-edit-prod')">Cancelar</button>
-</div></div>
-
 <div class="mo" id="mo-edit-user"><div class="mbox">
   <button class="mc" onclick="closeMo('mo-edit-user')">✕</button>
   <div class="mt" id="eu-title">Editar usuario</div>
@@ -516,34 +621,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;di
 </div>
 
 <script>
-// ── CONFIGURACIÓN Y ESTADO ───────────────────────────────────────────────────
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzolxGsfRFsyoyFptSyj035qBnPfW2bR2elR98nuh82MrrPzox7PEkbHMBVS64H5qHTog/exec';
-
-let USERS = {}; // Ya no hay usuarios hardcodeados
-let currentUser = null;
-
-let S = {
-  ing:0, gas:0, vprod:0, nprod:0, nsrv:0, ngst:0,
-  bars:{cb:0, cs:0, bf:0, pf:0, co:0},
-  movs:[], ncitas:0,
-  barberos:{
-    b1:{total:0, com:0, n:0, svcs:[], vprod:0},
-    b2:{total:0, com:0, n:0, svcs:[]},
-    b3:{total:0, com:0, n:0, svcs:[]}
-  },
-  costos:{alquiler:0, servicios:0, internet:0, insumos:0, otros:0},
-  productos:[] // Vacío hasta que Sheets responda
+// ── ESTADO ────────────────────────────────────────────────────────────────────
+let USERS={
+  dueno:{pass:'1234',role:'owner',nombre:'Dueño 1',socioId:'s1'},
+  socio2:{pass:'1234',role:'owner',nombre:'Dueño 2',socioId:'s2'},
+  barbero1:{pass:'1234',role:'b1',nombre:'Barbero Principal',pct:60},
+  barbero2:{pass:'1234',role:'b2',nombre:'Barbero 2',pct:50},
+  barbero3:{pass:'1234',role:'b3',nombre:'Barbero 3',pct:50}
 };
+let currentUser=null;
+let SHEETS_URL='';
 
+let S={
+  ing:0,gas:0,vprod:0,nprod:0,nsrv:0,ngst:0,
+  bars:{cb:0,cs:0,bf:0,pf:0,co:0},
+  movs:[],ncitas:0,
+  barberos:{
+    b1:{total:0,com:0,n:0,svcs:[],vprod:0},
+    b2:{total:0,com:0,n:0,svcs:[]},
+    b3:{total:0,com:0,n:0,svcs:[]}
+  },
+  costos:{alquiler:0,servicios:0,internet:0,insumos:0,otros:0},
+  productos:[
+    {nom:'Piercing Helix',cat:'💎 Piercings',costo:8000,venta:25000,stock:10},
+    {nom:'Pipa de vidrio',cat:'🔥 Pipas',costo:15000,venta:45000,stock:5},
+    {nom:'Grinder metálico',cat:'🌿 Accesorios',costo:12000,venta:35000,stock:8},
+    {nom:'Piercing Nostril',cat:'💎 Piercings',costo:5000,venta:18000,stock:12},
+    {nom:'Papel de liar',cat:'🌿 Accesorios',costo:1500,venta:4000,stock:30}
+  ]
+};
 let FILTROS={};
 
 function save(){
-  try{localStorage.setItem('fs_gh',JSON.stringify({S,USERS}))}catch(e){}
+  try{localStorage.setItem('fs_gh',JSON.stringify({S,USERS,SHEETS_URL}))}catch(e){}
 }
 function load(){
   try{
     const d=localStorage.getItem('fs_gh');
-    if(d){const p=JSON.parse(d);if(p.S)S={...S,...p.S};if(p.USERS)USERS={...USERS,...p.USERS};}
+    if(d){const p=JSON.parse(d);if(p.S)S={...S,...p.S};if(p.USERS)USERS={...USERS,...p.USERS};if(p.SHEETS_URL)SHEETS_URL=p.SHEETS_URL;}
   }catch(e){}
 }
 
@@ -553,59 +668,31 @@ function hora(){const n=new Date();return n.getHours().toString().padStart(2,'0'
 function fechaISO(){return new Date().toISOString().split('T')[0]}
 function pct(bid){return bid==='b1'?60:50}
 
-// ── INTEGRACIÓN SHEETS ────────────────────────────────────────────────────────
-async function cargarDatosSheets() {
-  const btn = document.getElementById('btn-ingresar');
-  const err = document.getElementById('li-err');
-  const bo = document.getElementById('btn-cliente');
-  
-  try {
-    err.textContent = 'Sincronizando con Sheets...';
-    btn.disabled = true;
-    btn.textContent = 'Cargando...';
-    bo.disabled = true;
-
-    // Llama al Google Apps Script (Debe tener un doGet preparado para retornar {USERS, S})
-    const res = await fetch(SHEETS_URL);
-    const data = await res.json();
-
-    if (data.S) S = {...S, ...data.S};
-    if (data.USERS) USERS = data.USERS;
-
-    save(); // Guardar en local como respaldo
-    err.style.color = 'var(--success)';
-    err.textContent = 'Datos sincronizados';
-    setTimeout(() => err.textContent = '', 2000);
-
-    // Renderizar listados si procede
-    const sbInit = document.getElementById('sv-bar');
-    if(sbInit) sbInit.innerHTML = Object.entries(USERS).filter(([,v])=>v.role!=='owner').map(([k,u])=>`<option value="${u.role}">${u.nombre} (${u.pct}%)</option>`).join('');
-
-  } catch (e) {
-    err.style.color = 'var(--danger)';
-    err.textContent = 'Modo sin conexión (usando datos locales)';
-    console.error('Error fetching sheets', e);
-    load(); // Carga desde caché si falla la red
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Ingresar';
-    bo.disabled = false;
-  }
-}
-
-// Cargar la data de Google Sheets al arrancar
-window.onload = cargarDatosSheets;
-
+// ── SHEETS ────────────────────────────────────────────────────────────────────
 async function enviarSheets(data){
   if(!SHEETS_URL)return;
   try{
-    // Las llamadas se hacen vía POST sin CORS (no-cors support is ideal)
-    await fetch(SHEETS_URL,{
-      method:'POST',
-      body:JSON.stringify(data)
-    });
-  }catch(e){
-    console.log('Sheets offline, dato guardado localmente');
+    await fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(data)});
+  }catch(e){console.log('Sheets offline, dato guardado localmente')}
+}
+
+function guardarSheetsUrl(){
+  const url=document.getElementById('sheets-url').value.trim();
+  if(!url){return}
+  SHEETS_URL=url;save();
+  document.getElementById('sheets-dot').className='dot connected';
+  document.getElementById('sheets-status-txt').textContent='Conectado';
+  document.getElementById('sheets-status-txt').style.color='var(--success)';
+}
+
+function actualizarSheetsStatus(){
+  const dot=document.getElementById('sheets-dot');
+  const txt=document.getElementById('sheets-status-txt');
+  const inp=document.getElementById('sheets-url');
+  if(SHEETS_URL){
+    dot.className='dot connected';txt.textContent='Conectado';txt.style.color='var(--success)';inp.value=SHEETS_URL;
+  } else {
+    dot.className='dot disconnected';txt.textContent='No conectado';txt.style.color='var(--muted)';
   }
 }
 
@@ -621,40 +708,12 @@ function doLogin(){
   const u=document.getElementById('li-u').value.trim().toLowerCase();
   const p=document.getElementById('li-p').value;
   const err=document.getElementById('li-err');
-  // Si los usuarios externos no han cargado, usamos los usuarios locales por defecto
-  // para que nunca te quedes bloqueado afuera de la app
-  if (!S.usuarios || S.usuarios.length === 0) {
-    // Lista de usuarios por defecto por si falla la base de datos externa
-    const usuariosPorDefecto = [
-      { user: "dueno", pass: "1234", role: "owner" },
-      { user: "socio2", pass: "1234", role: "owner" },
-      { user: "barbero1", pass: "1234", role: "b1" },
-      { user: "barbero2", pass: "1234", role: "b2" },
-      { user: "barbero3", pass: "1234", role: "b3" }
-    ];
-    
-    const encontrado = usuariosPorDefecto.find(x => x.user === u && x.pass === p);
-    if (encontrado) {
-      loguearComo(encontrado.role, encontrado.user);
-      return;
-    } else {
-      err.textContent = "Usuario o contraseña incorrectos (Modo Local).";
-      return;
-    }
-  }
-  if (Object.keys(USERS).length === 0) {
-     err.textContent = 'Aún no se han cargado los usuarios de la base de datos.';
-     return;
-  }
-
   const match=Object.entries(USERS).find(([k,v])=>k===u&&v.pass===p);
-  if(!match){err.style.color='var(--danger)';err.textContent='Usuario o contraseña incorrectos';return}
+  if(!match){err.textContent='Usuario o contraseña incorrectos';return}
   err.textContent='';currentUser={key:match[0],...match[1]};
-  
   document.getElementById('li-u').value='';document.getElementById('li-p').value='';
   document.getElementById('lo-btn').style.display='block';
   const roleEl=document.getElementById('hdr-role');
-  
   if(currentUser.role==='owner'){
     roleEl.className='hdr-role ro';roleEl.textContent=currentUser.nombre;
     goScreen('sc-owner');buildFiltros('owner');renderOwner();renderTiendaOwner();
@@ -788,7 +847,6 @@ function registrarCostoOp(){
   S.costos[tipo]=m;save();renderCostos();closeMo('mo-costo-op');document.getElementById('co-monto').value='';
 }
 
-// ── PRODUCTOS ABM (Solo Dueños) ──────────────────────────────────────────────
 function agregarProducto(){
   const nom=document.getElementById('p-nom').value.trim();
   const cat=document.getElementById('p-cat').value;
@@ -796,53 +854,10 @@ function agregarProducto(){
   const venta=parseInt(document.getElementById('p-venta').value)||0;
   const stock=parseInt(document.getElementById('p-stock').value)||0;
   if(!nom||!venta)return;
-  
-  S.productos.push({nom,cat,costo,venta,stock});
-  save();
-  enviarSheets({tipo: 'sync_productos', productos: S.productos}); // Notificar a sheets
-  
+  S.productos.push({nom,cat,costo,venta,stock});save();
   renderTiendaOwner();renderTiendaBarbero('b1');
   ['p-nom','p-costo','p-venta','p-stock'].forEach(id=>document.getElementById(id).value='');
   closeMo('mo-prod');
-}
-
-function abrirEditProd(idx) {
-  const p = S.productos[idx];
-  document.getElementById('ep-idx').value = idx;
-  document.getElementById('ep-nom').value = p.nom;
-  document.getElementById('ep-cat').value = p.cat;
-  document.getElementById('ep-costo').value = p.costo;
-  document.getElementById('ep-venta').value = p.venta;
-  document.getElementById('ep-stock').value = p.stock;
-  openMo('mo-edit-prod');
-}
-
-function guardarEditProd() {
-  const idx = parseInt(document.getElementById('ep-idx').value);
-  const nom = document.getElementById('ep-nom').value.trim();
-  const cat = document.getElementById('ep-cat').value;
-  const costo = parseInt(document.getElementById('ep-costo').value) || 0;
-  const venta = parseInt(document.getElementById('ep-venta').value) || 0;
-  const stock = parseInt(document.getElementById('ep-stock').value) || 0;
-  if(!nom || !venta) return;
-
-  S.productos[idx] = {nom, cat, costo, venta, stock};
-  save();
-  enviarSheets({tipo: 'sync_productos', productos: S.productos}); // Sincronizar catálogo
-  renderTiendaOwner();
-  renderTiendaBarbero('b1');
-  closeMo('mo-edit-prod');
-}
-
-function eliminarProd() {
-  if(!confirm('¿Seguro que deseas eliminar este producto permanentemente?')) return;
-  const idx = parseInt(document.getElementById('ep-idx').value);
-  S.productos.splice(idx, 1);
-  save();
-  enviarSheets({tipo: 'sync_productos', productos: S.productos});
-  renderTiendaOwner();
-  renderTiendaBarbero('b1');
-  closeMo('mo-edit-prod');
 }
 
 // ── NOMBRES ───────────────────────────────────────────────────────────────────
@@ -856,8 +871,7 @@ function renderTiendaOwner(){
   if(!lista)return;lista.innerHTML='';sel.innerHTML='';
   S.productos.forEach((p,i)=>{
     const mg=p.costo>0?Math.round((p.venta-p.costo)/p.costo*100):0;
-    // Aquí se agrega el botón para "Editar" el producto (Solo visible en owner)
-    lista.innerHTML+=`<div class="prod-card"><div class="prod-top"><div><div class="prod-name">${p.nom}</div><div class="prod-cat">${p.cat}</div></div><span class="prod-margen">+${mg}%</span></div><div class="prod-precios"><span class="prod-costo">Costo: ${fmt(p.costo)}</span><span class="prod-venta">${fmt(p.venta)}</span></div><div style="margin-top:8px;display:flex;gap:5px"><button class="btn bo" style="font-size:11px;padding:6px;flex:1" onclick="abrirEditProd(${i})">✏️ Editar producto</button></div></div>`;
+    lista.innerHTML+=`<div class="prod-card"><div class="prod-top"><div><div class="prod-name">${p.nom}</div><div class="prod-cat">${p.cat}</div></div><span class="prod-margen">+${mg}%</span></div><div class="prod-precios"><span class="prod-costo">Costo: ${fmt(p.costo)}</span><span class="prod-venta">${fmt(p.venta)}</span></div></div>`;
     const opt=document.createElement('option');opt.value=i;opt.textContent=`${p.nom} — ${fmt(p.venta)}`;sel.appendChild(opt);
   });
   document.getElementById('n-prods').textContent=S.productos.length;
@@ -972,12 +986,16 @@ function renderConfig(){
   Object.entries(USERS).filter(([,v])=>v.role!=='owner').forEach(([key,u])=>{
     cb.innerHTML+=`<div class="cfg-row"><div class="cfg-icon">✂</div><div class="cfg-info"><div class="cfg-label">${u.nombre} <span class="badge bc">${u.pct}%</span></div><div class="cfg-sub">@${key}</div></div><button class="cfg-edit" onclick="editUser('${key}')">Editar</button></div>`;
   });
+  actualizarSheetsStatus();
   // Link público
   const pl=document.getElementById('public-link');
   if(pl)pl.textContent=window.location.href.split('?')[0];
   // Select barberos modal cobrar
   const sb=document.getElementById('sv-bar');
   if(sb){sb.innerHTML=Object.entries(USERS).filter(([,v])=>v.role!=='owner').map(([k,u])=>`<option value="${u.role}">${u.nombre} (${u.pct}%)</option>`).join('');}
+  // Hint login
+  const hint=document.getElementById('hint-block');
+  if(hint)hint.innerHTML='<b style="color:#333">Accesos:</b><br>'+Object.entries(USERS).map(([k])=>`${k} / ****`).join(' · ');
 }
 
 function editUser(key){
@@ -1026,6 +1044,16 @@ function bkFin(){
   enviarSheets({tipo:'cita',cliente:nom,whatsapp:cel,servicio:bkSrv.name,precio:bkSrv.price,hora:bkSlot,fecha:fechaISO()});
 }
 function bkReset(){bkSrv={name:'',price:0};bkSlot='';document.querySelectorAll('.bsrv').forEach(e=>e.classList.remove('sel'));document.querySelectorAll('.sl').forEach(e=>e.classList.remove('sel'));['bk-nom','bk-cel'].forEach(id=>document.getElementById(id).value='');document.getElementById('bk-ok').style.display='none';document.getElementById('bk-s1').style.display='block';}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+load();
+renderTiendaOwner();
+renderTiendaBarbero('b1');
+// Hint inicial (sin mostrar contraseñas)
+document.getElementById('hint-block').innerHTML='<b style="color:#333">Demo:</b><br>dueno·socio2·barbero1·barbero2·barbero3<br>Clave: <b style="color:#5BB3FF">1234</b>';
+// Init sv-bar
+const sbInit=document.getElementById('sv-bar');
+if(sbInit)sbInit.innerHTML=Object.entries(USERS).filter(([,v])=>v.role!=='owner').map(([k,u])=>`<option value="${u.role}">${u.nombre} (${u.pct}%)</option>`).join('');
 </script>
 </body>
 </html>
