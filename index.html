@@ -3,29 +3,35 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+/>
 
 <title>Freestyle Barbershop</title>
 
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json"/>
 
 <style>
 
 :root{
 
-  --bg:#0b0b0b;
-  --d1:#111111;
-  --d2:#181818;
-  --d3:#202020;
+  --bg:#050816;
 
-  --gold:#d4af37;
-  --cyan:#00c8ff;
+  --d1:#0c1026;
+  --d2:#111831;
+  --d3:#182347;
 
-  --txt:#f0f0f0;
-  --muted:#888;
+  --blue:#3ea6ff;
+  --blue2:#66c3ff;
+
+  --gold:#d6b06a;
+
+  --txt:#f5f7ff;
+  --muted:#8d9ab8;
 
   --success:#1dd65f;
-  --danger:#ff4b4b;
+  --danger:#ff4e4e;
 
 }
 
@@ -38,7 +44,13 @@
 
 body{
 
-  background:var(--bg);
+  background:
+  linear-gradient(
+    180deg,
+    #060a1a,
+    #09112a
+  );
+
   color:var(--txt);
 
   font-family:
@@ -48,13 +60,190 @@ body{
   sans-serif;
 
   min-height:100vh;
-  overflow-x:hidden;
 
 }
 
+/* LOGIN */
+
+.login{
+
+  min-height:100vh;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:24px;
+
+}
+
+.login-box{
+
+  width:100%;
+  max-width:400px;
+
+  background:
+  linear-gradient(
+    180deg,
+    rgba(17,24,49,.95),
+    rgba(12,16,38,.96)
+  );
+
+  border:1px solid #26355f;
+
+  border-radius:28px;
+
+  overflow:hidden;
+
+  box-shadow:
+  0 0 30px rgba(0,0,0,.5);
+
+}
+
+.login-cover{
+
+  height:220px;
+
+  background-image:
+  url('https://raw.githubusercontent.com/anfetaos/freestyle-barbershop/main/logo.jpg');
+
+  background-size:cover;
+  background-position:center;
+
+  position:relative;
+
+}
+
+.login-cover::after{
+
+  content:'';
+
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+    180deg,
+    rgba(0,0,0,.15),
+    rgba(0,0,0,.65)
+  );
+
+}
+
+.login-brand{
+
+  position:absolute;
+
+  bottom:14px;
+  left:16px;
+
+  z-index:2;
+
+}
+
+.brand-title{
+
+  font-size:28px;
+  font-weight:800;
+
+  color:white;
+
+  text-shadow:
+  0 2px 12px rgba(0,0,0,.5);
+
+}
+
+.brand-sub{
+
+  font-size:12px;
+  color:#d9e9ff;
+
+  letter-spacing:2px;
+
+}
+
+.login-form{
+
+  padding:22px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field label{
+
+  font-size:13px;
+  color:var(--muted);
+
+}
+
+.field input{
+
+  height:50px;
+
+  border:none;
+  outline:none;
+
+  border-radius:14px;
+
+  background:#0b1228;
+
+  border:1px solid #273860;
+
+  color:white;
+
+  padding:0 14px;
+
+}
+
+.login-btn{
+
+  height:52px;
+
+  border:none;
+  border-radius:16px;
+
+  background:
+  linear-gradient(
+    90deg,
+    var(--blue),
+    var(--blue2)
+  );
+
+  color:#08111f;
+
+  font-weight:800;
+
+  cursor:pointer;
+
+  margin-top:4px;
+
+}
+
+.login-error{
+
+  min-height:18px;
+
+  color:var(--danger);
+
+  text-align:center;
+
+  font-size:13px;
+
+}
+
+/* APP */
+
 .screen{
   display:none;
-  min-height:100vh;
 }
 
 .screen.on{
@@ -63,8 +252,14 @@ body{
 
 .topbar{
 
-  height:60px;
-  background:var(--d1);
+  height:68px;
+
+  background:
+  rgba(10,16,37,.92);
+
+  backdrop-filter:blur(10px);
+
+  border-bottom:1px solid #26355f;
 
   display:flex;
   align-items:center;
@@ -72,22 +267,26 @@ body{
 
   padding:0 16px;
 
-  border-bottom:1px solid #222;
-
   position:sticky;
   top:0;
   z-index:100;
 
 }
 
-.logo{
-  font-weight:700;
-  font-size:18px;
+.top-title{
+
+  font-weight:800;
+  font-size:20px;
+
+  color:var(--blue2);
+
 }
 
-.role{
-  font-size:13px;
+.top-user{
+
+  font-size:12px;
   color:var(--muted);
+
 }
 
 .wrap{
@@ -96,10 +295,16 @@ body{
 
 .card{
 
-  background:var(--d2);
-  border:1px solid #222;
+  background:
+  linear-gradient(
+    180deg,
+    rgba(18,25,52,.92),
+    rgba(12,17,37,.95)
+  );
 
-  border-radius:18px;
+  border:1px solid #26355f;
+
+  border-radius:22px;
 
   padding:16px;
 
@@ -108,9 +313,12 @@ body{
 }
 
 .tt{
+
   font-size:17px;
   font-weight:700;
-  margin-bottom:12px;
+
+  margin-bottom:14px;
+
 }
 
 .grid{
@@ -123,184 +331,61 @@ body{
 
 .btn{
 
-  height:52px;
+  min-height:72px;
 
   border:none;
-  border-radius:14px;
+  border-radius:18px;
 
-  background:var(--gold);
-  color:black;
+  background:
+  linear-gradient(
+    135deg,
+    var(--blue),
+    #285bff
+  );
 
-  font-weight:700;
-  cursor:pointer;
-
-}
-
-.btn2{
-
-  height:52px;
-
-  border:none;
-  border-radius:14px;
-
-  background:var(--d3);
   color:white;
 
-  border:1px solid #333;
+  font-weight:700;
+
+  padding:10px;
 
   cursor:pointer;
-
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-
-.field label{
-  font-size:13px;
-  color:#aaa;
-}
-
-.field input,
-.field select{
-
-  height:48px;
-
-  background:#101010;
-  color:white;
-
-  border:1px solid #2a2a2a;
-  border-radius:12px;
-
-  padding:0 14px;
-
-}
-
-.login-wrap{
-
-  width:100%;
-  max-width:380px;
-
-  margin:auto;
-  padding:24px;
-
-  display:flex;
-  flex-direction:column;
-  gap:22px;
-
-}
-
-.login-logo{
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-
-  margin-top:40px;
-
-}
-
-.logo-circle{
-
-  width:78px;
-  height:78px;
-
-  border-radius:50%;
-
-  border:2px solid var(--gold);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-size:26px;
-  font-weight:700;
-
-  color:var(--gold);
-
-}
-
-.login-title{
-  font-size:26px;
-  font-weight:700;
-}
-
-.login-sub{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.login-card{
-
-  background:var(--d2);
-
-  border:1px solid #222;
-
-  border-radius:20px;
-
-  padding:20px;
-
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-
-}
-
-.btn-login{
-
-  height:50px;
-
-  border:none;
-  border-radius:14px;
-
-  background:var(--gold);
-
-  font-weight:700;
-  cursor:pointer;
-
-}
-
-.login-error{
-
-  min-height:18px;
-
-  color:var(--danger);
-
-  text-align:center;
-  font-size:13px;
 
 }
 
 .kpi{
 
-  background:#101010;
-  border:1px solid #222;
+  background:#0b1228;
 
-  border-radius:16px;
+  border:1px solid #25345c;
 
-  padding:14px;
+  border-radius:18px;
+
+  padding:16px;
 
 }
 
 .kpi-num{
-  font-size:24px;
-  font-weight:700;
+
+  font-size:28px;
+  font-weight:800;
+
 }
 
 .kpi-lb{
+
   font-size:12px;
   color:var(--muted);
+
 }
 
 .prod{
 
-  background:#101010;
-  border:1px solid #222;
+  background:#0b1228;
 
-  border-radius:16px;
+  border:1px solid #25345c;
+
+  border-radius:18px;
 
   padding:14px;
 
@@ -308,13 +393,11 @@ body{
 
 }
 
-.prod-top{
+.row{
 
   display:flex;
   justify-content:space-between;
   align-items:center;
-
-  margin-bottom:10px;
 
 }
 
@@ -323,14 +406,13 @@ body{
 }
 
 .prod-cat{
+
   font-size:12px;
   color:var(--muted);
+
 }
 
 .badge{
-
-  background:#202020;
-  border:1px solid #333;
 
   padding:4px 8px;
 
@@ -338,44 +420,25 @@ body{
 
   font-size:11px;
 
-}
+  background:#172244;
 
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.sep{
-  height:1px;
-  background:#222;
-  margin:14px 0;
-}
-
-.dot{
-
-  width:10px;
-  height:10px;
-
-  border-radius:50%;
+  border:1px solid #324a81;
 
 }
 
-.connected{
-  background:var(--success);
-}
+.logout{
 
-.disconnected{
-  background:var(--danger);
-}
+  border:none;
 
-.status{
+  background:#182347;
 
-  display:flex;
-  align-items:center;
-  gap:8px;
+  color:white;
 
-  font-size:13px;
+  border:1px solid #2f4374;
+
+  border-radius:12px;
+
+  padding:10px 14px;
 
 }
 
@@ -385,27 +448,30 @@ body{
 
 <!-- LOGIN -->
 
-<section id="sc-login" class="screen on">
+<section
+  id="sc-login"
+  class="login"
+>
 
-  <div class="login-wrap">
+  <div class="login-box">
 
-    <div class="login-logo">
+    <div class="login-cover">
 
-      <div class="logo-circle">
-        FS
-      </div>
+      <div class="login-brand">
 
-      <div class="login-title">
-        Freestyle
-      </div>
+        <div class="brand-title">
+          Freestyle
+        </div>
 
-      <div class="login-sub">
-        Control de Barbería
+        <div class="brand-sub">
+          URBAN GROOMING
+        </div>
+
       </div>
 
     </div>
 
-    <div class="login-card">
+    <div class="login-form">
 
       <div class="field">
 
@@ -414,8 +480,7 @@ body{
         <input
           id="li-u"
           type="text"
-          autocomplete="off"
-        >
+        />
 
       </div>
 
@@ -426,7 +491,7 @@ body{
         <input
           id="li-p"
           type="password"
-        >
+        />
 
       </div>
 
@@ -436,10 +501,10 @@ body{
       ></div>
 
       <button
-        class="btn-login"
+        class="login-btn"
         onclick="doLogin()"
       >
-        Ingresar
+        INGRESAR
       </button>
 
     </div>
@@ -448,29 +513,31 @@ body{
 
 </section>
 
-<!-- OWNER -->
+<!-- APP -->
 
-<section id="sc-owner" class="screen">
+<section
+  id="sc-app"
+  class="screen"
+>
 
   <div class="topbar">
 
     <div>
 
-      <div class="logo">
+      <div class="top-title">
         Freestyle
       </div>
 
       <div
-        id="hdr-role"
-        class="role"
+        id="top-user"
+        class="top-user"
       ></div>
 
     </div>
 
     <button
-      class="btn2"
-      style="width:110px;height:40px"
-      onclick="doLogout()"
+      class="logout"
+      onclick="logout()"
     >
       Salir
     </button>
@@ -479,22 +546,7 @@ body{
 
   <div class="wrap">
 
-    <div class="card">
-
-      <div class="status">
-
-        <div
-          id="sheets-dot"
-          class="dot disconnected"
-        ></div>
-
-        <div id="sheets-status-txt">
-          Sin conexión
-        </div>
-
-      </div>
-
-    </div>
+    <!-- KPIs -->
 
     <div class="grid">
 
@@ -516,24 +568,26 @@ body{
       <div class="kpi">
 
         <div
-          id="kpi-gastos"
+          id="kpi-citas"
           class="kpi-num"
         >
-          $0
+          0
         </div>
 
         <div class="kpi-lb">
-          Gastos
+          Citas
         </div>
 
       </div>
 
     </div>
 
+    <!-- SERVICIOS -->
+
     <div class="card">
 
       <div class="tt">
-        Cobrar Servicio
+        Servicios
       </div>
 
       <div
@@ -543,35 +597,15 @@ body{
 
     </div>
 
-    <div class="card">
-
-      <div class="row">
-
-        <div class="tt">
-          Productos
-        </div>
-
-        <button
-          class="btn2"
-          style="width:120px"
-          onclick="agregarProductoPrompt()"
-        >
-          Agregar
-        </button>
-
-      </div>
-
-      <div id="productos-wrap"></div>
-
-    </div>
+    <!-- PRODUCTOS -->
 
     <div class="card">
 
       <div class="tt">
-        Costos Operativos
+        Productos
       </div>
 
-      <div id="costos-wrap"></div>
+      <div id="productos-wrap"></div>
 
     </div>
 
@@ -581,164 +615,142 @@ body{
 
 <script>
 
-/* ───────────────────────────── */
-
 const SHEETS_URL =
 'https://script.google.com/macros/s/AKfycbyVXijFTgUwIKKA9wxCoQ-McPeu3oSw2tzIKNmaliLDkmhY0RCHKbSqKA5Tj_TRjO3D6A/exec';
 
-/* ───────────────────────────── */
-
-let USERS      = {};
-let SERVICIOS  = [];
-let PRODUCTOS  = [];
-let COSTOS     = {};
-let CONFIG     = {};
-
-let VENTAS     = [];
-let GASTOS     = [];
+let DB = {};
 
 let currentUser = null;
 
-/* ───────────────────────────── */
+/* HELPERS */
 
 function qs(id){
   return document.getElementById(id);
 }
 
-function fmt(n=0){
-  return '$'+Number(n)
+function money(n=0){
+
+  return '$'+
+  Number(n)
   .toLocaleString('es-CO');
+
 }
 
-/* ───────────────────────────── */
+/* LOAD */
 
-async function api(action,data={}){
+async function loadDB(){
 
-  try{
+  const r =
+  await fetch(
+    SHEETS_URL+'?action=load'
+  );
 
-    const res = await fetch(SHEETS_URL,{
+  const j =
+  await r.json();
 
-      method:'POST',
+  if(!j.success){
 
-      headers:{
-        'Content-Type':'application/json'
-      },
-
-      body:JSON.stringify({
-        action,
-        data
-      })
-
-    });
-
-    return await res.json();
-
-  }catch(err){
-
-    console.log(err);
-
-    return {
-      success:false
-    };
+    alert('Error Sheets');
+    return;
 
   }
 
+  DB = j.data;
+
+  renderServicios();
+  renderProductos();
+  renderKPIs();
+
 }
 
-/* ───────────────────────────── */
+/* LOGIN */
 
-async function cargarSistema(){
+function doLogin(){
 
-  try{
+  const u =
+  qs('li-u').value.trim();
 
-    const res =
-    await fetch(
-      SHEETS_URL+'?action=load'
-    );
+  const p =
+  qs('li-p').value.trim();
 
-    const json =
-    await res.json();
+  const user =
+  DB.usuarios[u];
 
-    if(!json.success){
+  if(!user){
 
-      actualizarEstado(false);
+    qs('li-err').innerHTML =
+    'Usuario inválido';
 
-      return;
-
-    }
-
-    USERS      = json.data.usuarios  || {};
-    SERVICIOS  = json.data.servicios || [];
-    PRODUCTOS  = json.data.productos || [];
-    COSTOS     = json.data.costos    || {};
-    CONFIG     = json.data.config    || {};
-    VENTAS     = json.data.ventas    || [];
-    GASTOS     = json.data.gastos    || [];
-
-    actualizarEstado(true);
-
-    renderServicios();
-    renderProductos();
-    renderCostos();
-    renderKPIs();
-
-  }catch(err){
-
-    console.log(err);
-
-    actualizarEstado(false);
+    return;
 
   }
 
-}
+  if(!user.activo){
 
-/* ───────────────────────────── */
+    qs('li-err').innerHTML =
+    'Usuario inactivo';
 
-function actualizarEstado(ok){
-
-  const dot = qs('sheets-dot');
-  const txt = qs('sheets-status-txt');
-
-  if(ok){
-
-    dot.className='dot connected';
-
-    txt.innerHTML='Conectado';
-
-  }else{
-
-    dot.className='dot disconnected';
-
-    txt.innerHTML='Sin conexión';
+    return;
 
   }
 
+  if(
+    String(user.pass) !==
+    String(p)
+  ){
+
+    qs('li-err').innerHTML =
+    'Contraseña incorrecta';
+
+    return;
+
+  }
+
+  currentUser = user;
+
+  qs('top-user').innerHTML =
+  user.nombre;
+
+  qs('sc-login').style.display='none';
+
+  qs('sc-app').classList.add('on');
+
 }
 
-/* ───────────────────────────── */
+/* LOGOUT */
+
+function logout(){
+
+  currentUser = null;
+
+  qs('sc-login').style.display='flex';
+
+  qs('sc-app').classList.remove('on');
+
+}
+
+/* KPIS */
 
 function renderKPIs(){
 
-  let totalVentas = 0;
-  let totalGastos = 0;
+  let ventas = 0;
 
-  VENTAS.forEach(x=>{
-    totalVentas += Number(x.total || 0);
-  });
+  DB.ventas.forEach(v=>{
 
-  GASTOS.forEach(x=>{
-    totalGastos += Number(x.monto || 0);
+    ventas +=
+    Number(v.valor || 0);
+
   });
 
   qs('kpi-ventas').innerHTML =
-  fmt(totalVentas);
+  money(ventas);
 
-  qs('kpi-gastos').innerHTML =
-  fmt(totalGastos);
+  qs('kpi-citas').innerHTML =
+  DB.citas.length;
 
 }
 
-/* ───────────────────────────── */
+/* SERVICIOS */
 
 function renderServicios(){
 
@@ -747,8 +759,8 @@ function renderServicios(){
 
   wrap.innerHTML='';
 
-  SERVICIOS
-  .filter(x=>x.activo)
+  DB.servicios
+  .filter(s=>s.activo)
   .forEach(serv=>{
 
     const btn =
@@ -757,8 +769,15 @@ function renderServicios(){
     btn.className='btn';
 
     btn.innerHTML=`
-      ${serv.nombre}<br>
-      ${fmt(serv.precio)}
+
+      <div>
+        ${serv.nombre}
+      </div>
+
+      <div>
+        ${money(serv.precio)}
+      </div>
+
     `;
 
     btn.onclick=()=>{
@@ -773,7 +792,7 @@ function renderServicios(){
 
 }
 
-/* ───────────────────────────── */
+/* PRODUCTOS */
 
 function renderProductos(){
 
@@ -782,7 +801,9 @@ function renderProductos(){
 
   wrap.innerHTML='';
 
-  PRODUCTOS.forEach(prod=>{
+  DB.productos
+  .filter(p=>p.activo)
+  .forEach(prod=>{
 
     const div =
     document.createElement('div');
@@ -791,7 +812,7 @@ function renderProductos(){
 
     div.innerHTML=`
 
-      <div class="prod-top">
+      <div class="row">
 
         <div>
 
@@ -811,55 +832,17 @@ function renderProductos(){
 
       </div>
 
-      <div class="row">
+      <div
+        class="row"
+        style="margin-top:10px"
+      >
 
         <div>
-          Costo:
-          ${fmt(prod.costo)}
+          ${money(prod.costo)}
         </div>
 
         <div>
-          Venta:
-          ${fmt(prod.venta)}
-        </div>
-
-      </div>
-
-    `;
-
-    wrap.appendChild(div);
-
-  });
-
-}
-
-/* ───────────────────────────── */
-
-function renderCostos(){
-
-  const wrap =
-  qs('costos-wrap');
-
-  wrap.innerHTML='';
-
-  Object.keys(COSTOS)
-  .forEach(key=>{
-
-    const div =
-    document.createElement('div');
-
-    div.className='prod';
-
-    div.innerHTML=`
-
-      <div class="row">
-
-        <div>
-          ${key}
-        </div>
-
-        <div>
-          ${fmt(COSTOS[key])}
+          ${money(prod.venta)}
         </div>
 
       </div>
@@ -872,166 +855,65 @@ function renderCostos(){
 
 }
 
-/* ───────────────────────────── */
-
-function doLogin(){
-
-  const u =
-  qs('li-u').value.trim();
-
-  const p =
-  qs('li-p').value.trim();
-
-  const usr =
-  USERS[u];
-
-  if(!usr){
-
-    qs('li-err').innerHTML =
-    'Usuario inválido';
-
-    return;
-
-  }
-
-  if(!usr.activo){
-
-    qs('li-err').innerHTML =
-    'Usuario desactivado';
-
-    return;
-
-  }
-
-  if(usr.pass !== p){
-
-    qs('li-err').innerHTML =
-    'Contraseña incorrecta';
-
-    return;
-
-  }
-
-  currentUser = usr;
-
-  qs('hdr-role').innerHTML =
-  usr.nombre;
-
-  openScreen('sc-owner');
-
-}
-
-/* ───────────────────────────── */
-
-function doLogout(){
-
-  currentUser = null;
-
-  openScreen('sc-login');
-
-}
-
-/* ───────────────────────────── */
-
-function openScreen(id){
-
-  document
-  .querySelectorAll('.screen')
-  .forEach(x=>x.classList.remove('on'));
-
-  qs(id).classList.add('on');
-
-}
-
-/* ───────────────────────────── */
+/* COBRAR */
 
 async function cobrarServicio(serv){
 
   if(!currentUser)return;
 
-  const data = {
+  const body = {
 
-    fecha:new Date().toISOString(),
+    action:'guardarVenta',
 
-    usuario:currentUser.nombre,
+    data:{
 
-    servicio:serv.nombre,
+      tipo:'servicio',
 
-    codigo:serv.codigo,
+      item_id:serv.id,
 
-    total:serv.precio
+      item_nombre:serv.nombre,
+
+      valor:serv.precio,
+
+      cantidad:1,
+
+      usuario:currentUser.usuario
+
+    }
 
   };
 
   const r =
-  await api(
-    'guardarVenta',
-    data
-  );
+  await fetch(SHEETS_URL,{
 
-  if(r.success){
+    method:'POST',
 
-    alert('Servicio cobrado');
+    headers:{
+      'Content-Type':'application/json'
+    },
 
-    await cargarSistema();
+    body:JSON.stringify(body)
 
-  }
+  });
 
-}
+  const j =
+  await r.json();
 
-/* ───────────────────────────── */
+  if(j.success){
 
-async function agregarProductoPrompt(){
+    alert('Venta registrada');
 
-  const nom =
-  prompt('Nombre producto');
-
-  if(!nom)return;
-
-  const cat =
-  prompt('Categoría');
-
-  const costo =
-  Number(prompt('Costo'));
-
-  const venta =
-  Number(prompt('Precio venta'));
-
-  const stock =
-  Number(prompt('Stock'));
-
-  const r =
-  await api(
-    'guardarProducto',
-    {
-      nom,
-      cat,
-      costo,
-      venta,
-      stock
-    }
-  );
-
-  if(r.success){
-
-    alert('Producto agregado');
-
-    cargarSistema();
+    await loadDB();
 
   }
 
 }
 
-/* ───────────────────────────── */
+/* INIT */
 
 (async()=>{
 
-  await cargarSistema();
-
-  setInterval(
-    cargarSistema,
-    15000
-  );
+  await loadDB();
 
 })();
 
